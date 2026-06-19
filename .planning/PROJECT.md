@@ -17,18 +17,22 @@ Terraform for the **shared AWS baseline** of the Odoo Entitlements SaaS platform
 - ✓ Repo scaffold: `bootstrap/` + `envs/prod/` + 10 stub `modules/` — existing
 - ✓ S3 remote-state backend with native S3 locking (`use_lockfile=true`, no DynamoDB), provisioned by `bootstrap/` — existing
 - ✓ `name_prefix` naming/tagging contract threaded to every module; all wiring lives in `envs/prod/main.tf` (no module-to-module calls) — existing
-- ✓ Typed Terraform→provisioner output contract in `envs/prod/outputs.tf` — existing (currently commented pending module implementation)
+- ✓ Typed Terraform→provisioner output contract in `envs/prod/outputs.tf` — networking outputs now active (`vpc_id`, `private_subnet_ids`, `task_security_group_id`, `alb_security_group_id`); the rest remain commented pending their modules
+
+<!-- Validated in Phase 1: Networking module -->
+
+- ✓ **NET-01**: `modules/networking` implements a VPC for the prod baseline — Phase 1
+- ✓ **NET-02**: Public subnets across ≥2 AZs, **no NAT gateway** (cost decision) — Phase 1
+- ✓ **NET-03**: ALB security group (ingress 80/443 from internet) — Phase 1
+- ✓ **NET-04**: Task security group that accepts port 8069 **only** from the ALB SG (SG-reference source, not CIDR) — Phase 1
+- ✓ **NET-05**: Module exports the four contract outputs and the `envs/prod` networking call + outputs are uncommented — Phase 1
+- ✓ **NET-06**: `terraform fmt` + `terraform validate` pass and a non-empty `terraform plan` (9 resources) is produced via the offline `make plan-check` gate — Phase 1
 
 ### Active
 
-<!-- Current milestone: networking module only. -->
+<!-- No active milestone — Phase 1 (networking) complete. Next: start a new milestone for the next module (ecr/ecs/rds/etc.) per SEED-001 build order. -->
 
-- [ ] **NET-01**: `modules/networking` implements a VPC for the prod baseline
-- [ ] **NET-02**: Public subnet(s) across AZs, **no NAT gateway** (cost decision)
-- [ ] **NET-03**: ALB security group (ingress 80/443 from internet)
-- [ ] **NET-04**: Task security group that accepts port 8069 **only** from the ALB SG
-- [ ] **NET-05**: Module exports the outputs the contract needs (`vpc_id`, `private_subnet_ids`, `task_security_group_id`, `alb_security_group_id`) and the `envs/prod` networking call + outputs are uncommented
-- [ ] **NET-06**: `terraform fmt` + `terraform validate` pass and `terraform plan` produces a clean, non-empty plan for the networking resources
+*None — see Out of Scope for deferred modules.*
 
 ### Out of Scope
 
@@ -83,4 +87,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-19 after initialization*
+*Last updated: 2026-06-19 after Phase 1 (networking module) completion*
