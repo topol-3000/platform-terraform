@@ -11,10 +11,12 @@ locals {
 }
 
 # --- 2. Networking: VPC, public subnet (NO NAT gateway), security groups ------
-# module "networking" {
-#   source      = "../../modules/networking"
-#   name_prefix = local.name_prefix
-# }
+module "networking" {
+  source      = "../../modules/networking"
+  name_prefix = local.name_prefix
+  vpc_cidr    = var.vpc_cidr
+  azs         = var.azs
+}
 
 # --- 3. ECR pull-through cache (odoo-core image from GHCR) ---------------------
 # module "ecr" {
