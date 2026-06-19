@@ -34,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 **Wave 1**
 
-- [ ] 01-01-PLAN.md — Implement modules/networking (VPC, public subnets, IGW/route table, ALB + task SGs, variables with validation, four outputs)
+- [x] 01-01-PLAN.md — Implement modules/networking (VPC, public subnets, IGW/route table, ALB + task SGs, variables with validation, four outputs)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -47,4 +47,4 @@ Single phase — Phase 1.
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Networking module | 0/2 | Not started | - |
+| 1. Networking module | 1/2 | In Progress|  |
