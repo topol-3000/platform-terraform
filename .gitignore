@@ -21,3 +21,7 @@ crash.*.log
 
 # Plan output
 *.tfplan
+
+# Transient offline-gate override written/removed by `make plan-check`.
+# Never committed — providers.tf + backend.tf are the real config.
+gate_override.tf
