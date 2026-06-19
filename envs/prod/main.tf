@@ -1,8 +1,9 @@
 # Prod baseline — wires the shared-resource modules together.
 #
-# Module calls are commented out until each module is implemented, so that
-# `terraform plan` succeeds (with no resources) on a fresh scaffold. Uncomment
-# and fill inputs as you build each module, following SEED-001 build order.
+# The networking module is implemented and wired below. The remaining module
+# calls are commented out until each module is implemented, so that
+# `terraform plan` succeeds on a fresh scaffold. Uncomment and fill inputs as
+# you build each module, following SEED-001 build order.
 #
 # See: ../../../provisioner/.planning/seeds/SEED-001-aws-real-deployment.md
 

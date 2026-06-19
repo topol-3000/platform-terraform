@@ -17,16 +17,21 @@ init: ## terraform init for $(ENV)
 	cd $(ENV_DIR) && terraform init
 
 plan: ## terraform plan for $(ENV) (real: S3 backend + AWS creds)
+	@rm -f $(ENV_DIR)/gate_override.tf
 	cd $(ENV_DIR) && terraform plan
 
 # Offline code-complete gate. AWS provider v6 always calls STS:GetCallerIdentity and
 # backend.tf points at S3, so a plain `terraform plan` can't run without AWS access.
 # This target writes a transient *_override.tf (local backend + stubbed AWS provider),
-# runs fmt/validate/plan with zero AWS/S3 access, then always removes it (EXIT trap).
+# runs fmt/validate/plan with zero AWS/S3 access, then always removes it. The trap is
+# armed (EXIT INT TERM) BEFORE the file is written, so an interrupt cannot strand the
+# override — a stale gate_override.tf would otherwise silently merge skip_* flags into
+# the real provider. As defense-in-depth, real `plan`/`apply` also delete it first.
 # providers.tf and backend.tf stay clean for real applies (D-07).
 plan-check: ## Offline gate for $(ENV): fmt -check, validate, non-empty plan (no AWS/S3 access)
 	terraform fmt -check -recursive
 	@cd $(ENV_DIR) && \
+		trap 'rm -f gate_override.tf terraform.tfstate terraform.tfstate.backup; rm -rf .terraform' EXIT INT TERM && \
 		printf '%s\n' \
 			'terraform {' \
 			'  backend "local" {}' \
@@ -38,12 +43,12 @@ plan-check: ## Offline gate for $(ENV): fmt -check, validate, non-empty plan (no
 			'  access_key                  = "dummy"' \
 			'  secret_key                  = "dummy"' \
 			'}' > gate_override.tf && \
-		trap 'rm -f gate_override.tf terraform.tfstate terraform.tfstate.backup; rm -rf .terraform .terraform.lock.hcl' EXIT && \
 		terraform init -reconfigure -input=false >/dev/null && \
 		terraform validate && \
 		terraform plan -input=false
 
 apply: ## terraform apply for $(ENV)
+	@rm -f $(ENV_DIR)/gate_override.tf
 	cd $(ENV_DIR) && terraform apply
 
 destroy: ## terraform destroy for $(ENV)
