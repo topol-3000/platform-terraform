@@ -13,7 +13,7 @@ This is a single-milestone roadmap. The milestone scope is the `networking` Terr
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Networking module** - VPC, public subnets (no NAT), ALB + task security groups, wired into envs/prod with a clean non-empty plan
+- [x] **Phase 1: Networking module** - VPC, public subnets (no NAT), ALB + task security groups, wired into envs/prod with a clean non-empty plan (completed 2026-06-19)
 
 ## Phase Details
 
@@ -38,7 +38,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 01-02-PLAN.md — Wire networking into envs/prod (vars + module call + output re-exports), add offline dummy-AWS make plan, run fmt/validate/non-empty-plan gate
+- [x] 01-02-PLAN.md — Wire networking into envs/prod (vars + module call + output re-exports), add offline dummy-AWS make plan, run fmt/validate/non-empty-plan gate
 
 ## Progress
 
@@ -47,4 +47,4 @@ Single phase — Phase 1.
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Networking module | 1/2 | In Progress|  |
+| 1. Networking module | 2/2 | Complete   | 2026-06-19 |
