@@ -9,13 +9,13 @@ Milestone scope: **the `networking` module only** (one milestone at a time per t
 
 ### Networking
 
-- [ ] **NET-01**: `modules/networking` declares a VPC for the prod baseline (CIDR via variable, `name_prefix`-tagged)
-- [ ] **NET-02**: Public subnets across ≥2 AZs (required by the ALB) with `map_public_ip_on_launch`, an internet gateway, and a public route table (`0.0.0.0/0 → IGW`) — **no NAT gateway** (cost decision). Only public subnets are created; no private subnets in this milestone.
-- [ ] **NET-03**: ALB security group allowing ingress 80/443 from the internet (`0.0.0.0/0`) and egress out
-- [ ] **NET-04**: Task security group accepting port 8069 **only** from the ALB SG (source = ALB SG id, not a CIDR), with egress out
-- [ ] **NET-05**: Module declares the required inputs (e.g. `name_prefix`, `vpc_cidr`, `az_count`/`azs`) in `variables.tf` and exports `vpc_id`, `private_subnet_ids` (the public subnets are exposed under this existing contract name so the provisioner contract is unchanged), `task_security_group_id`, `alb_security_group_id` in `outputs.tf`
-- [ ] **NET-06**: The `module "networking"` call in `envs/prod/main.tf` and its corresponding `envs/prod/outputs.tf` outputs are uncommented and wired
-- [ ] **NET-07**: `terraform fmt -check`, `terraform validate`, and `terraform plan` (in `envs/prod`) all pass and the plan is non-empty (real networking resources appear)
+- [x] **NET-01**: `modules/networking` declares a VPC for the prod baseline (CIDR via variable, `name_prefix`-tagged)
+- [x] **NET-02**: Public subnets across ≥2 AZs (required by the ALB) with `map_public_ip_on_launch`, an internet gateway, and a public route table (`0.0.0.0/0 → IGW`) — **no NAT gateway** (cost decision). Only public subnets are created; no private subnets in this milestone.
+- [x] **NET-03**: ALB security group allowing ingress 80/443 from the internet (`0.0.0.0/0`) and egress out
+- [x] **NET-04**: Task security group accepting port 8069 **only** from the ALB SG (source = ALB SG id, not a CIDR), with egress out
+- [x] **NET-05**: Module declares the required inputs (e.g. `name_prefix`, `vpc_cidr`, `az_count`/`azs`) in `variables.tf` and exports `vpc_id`, `private_subnet_ids` (the public subnets are exposed under this existing contract name so the provisioner contract is unchanged), `task_security_group_id`, `alb_security_group_id` in `outputs.tf`
+- [x] **NET-06**: The `module "networking"` call in `envs/prod/main.tf` and its corresponding `envs/prod/outputs.tf` outputs are uncommented and wired
+- [x] **NET-07**: `terraform fmt -check`, `terraform validate`, and `terraform plan` (in `envs/prod`) all pass and the plan is non-empty (real networking resources appear)
 
 ## v2 Requirements
 
@@ -48,13 +48,13 @@ Deferred to future milestones (one module per milestone, SEED-001 build order). 
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NET-01 | Phase 1 | Pending |
-| NET-02 | Phase 1 | Pending |
-| NET-03 | Phase 1 | Pending |
-| NET-04 | Phase 1 | Pending |
-| NET-05 | Phase 1 | Pending |
-| NET-06 | Phase 1 | Pending |
-| NET-07 | Phase 1 | Pending |
+| NET-01 | Phase 1 | Complete |
+| NET-02 | Phase 1 | Complete |
+| NET-03 | Phase 1 | Complete |
+| NET-04 | Phase 1 | Complete |
+| NET-05 | Phase 1 | Complete |
+| NET-06 | Phase 1 | Complete |
+| NET-07 | Phase 1 | Complete |
 
 **Coverage:**
 - v1 requirements: 7 total
