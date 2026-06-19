@@ -8,15 +8,25 @@
 #   value       = module.ecs.cluster_arn
 # }
 
-# output "private_subnet_ids" {
-#   description = "Subnets for tenant tasks -> provisioner `aws_subnets`."
-#   value       = module.networking.private_subnet_ids
-# }
+output "private_subnet_ids" {
+  description = "Subnets for tenant tasks -> provisioner `aws_subnets`."
+  value       = module.networking.private_subnet_ids
+}
 
-# output "task_security_group_id" {
-#   description = "SG for tenant tasks -> provisioner `aws_security_groups`."
-#   value       = module.networking.task_security_group_id
-# }
+output "task_security_group_id" {
+  description = "SG for tenant tasks -> provisioner `aws_security_groups`."
+  value       = module.networking.task_security_group_id
+}
+
+output "vpc_id" {
+  description = "VPC id -> consumed by downstream rds/ecs/alb modules."
+  value       = module.networking.vpc_id
+}
+
+output "alb_security_group_id" {
+  description = "ALB security group id -> consumed by downstream alb module."
+  value       = module.networking.alb_security_group_id
+}
 
 # output "alb_listener_arn" {
 #   description = "ALB HTTPS listener ARN -> provisioner `aws_alb_listener_arn`."

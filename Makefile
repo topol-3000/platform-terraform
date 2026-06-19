@@ -16,8 +16,8 @@ bootstrap: ## Create the S3 state bucket (run once, local state)
 init: ## terraform init for $(ENV)
 	cd $(ENV_DIR) && terraform init
 
-plan: ## terraform plan for $(ENV)
-	cd $(ENV_DIR) && terraform plan
+plan: ## terraform plan for $(ENV) (offline: dummy AWS creds)
+	cd $(ENV_DIR) && AWS_ACCESS_KEY_ID=dummy AWS_SECRET_ACCESS_KEY=dummy AWS_REGION=eu-central-1 terraform plan
 
 apply: ## terraform apply for $(ENV)
 	cd $(ENV_DIR) && terraform apply
