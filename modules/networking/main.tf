@@ -7,7 +7,7 @@
 # VPC for the prod baseline — all shared resources live in this network boundary.
 resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
-  enable_dns_support   = true  # ECS tasks need DNS to resolve AWS endpoints (ECR, SSM, etc.)
+  enable_dns_support   = true # ECS tasks need DNS to resolve AWS endpoints (ECR, SSM, etc.)
   enable_dns_hostnames = true
 
   tags = { Name = "${var.name_prefix}-vpc" }
