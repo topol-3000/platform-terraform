@@ -26,7 +26,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. The ALB security group permits ingress on 80 and 443 from `0.0.0.0/0` with egress open, and every created resource name carries the `var.name_prefix` prefix.
   4. The `module "networking"` call in `envs/prod/main.tf` and its four corresponding outputs in `envs/prod/outputs.tf` are uncommented and resolve — the public subnets are exported under the existing `private_subnet_ids` output name so the provisioner contract is unchanged.
   5. `terraform fmt -check` (recursive) and `terraform validate` both pass for the repo / `envs/prod`.
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Implement modules/networking (VPC, public subnets, IGW/route table, ALB + task SGs, variables with validation, four outputs)
+- [ ] 01-02-PLAN.md — Wire networking into envs/prod (vars + module call + output re-exports), add offline dummy-AWS make plan, run fmt/validate/non-empty-plan gate
 
 ## Progress
 
@@ -35,4 +39,4 @@ Single phase — Phase 1.
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Networking module | 0/TBD | Not started | - |
+| 1. Networking module | 0/2 | Not started | - |
