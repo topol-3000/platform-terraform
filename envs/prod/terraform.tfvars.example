@@ -1,0 +1,9 @@
+# Copy to terraform.tfvars and edit. terraform.tfvars is gitignored.
+
+region        = "eu-central-1"
+environment   = "prod"
+project       = "odoo-saas"
+
+# Apex domain tenants are served under, e.g. "saas.example.com".
+# Required before building the route53 / acm / alb modules.
+tenant_domain = ""

@@ -1,0 +1,23 @@
+# Terraform
+.terraform/
+.terraform.lock.hcl
+crash.log
+crash.*.log
+
+# State files — remote state lives in S3. Never commit env state locally.
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# EXCEPTION: bootstrap uses local state (it creates the S3 bucket). Commit it
+# so the state bucket is reproducible — it contains no secrets.
+!bootstrap/terraform.tfstate
+!bootstrap/terraform.tfstate.backup
+
+# Variable files with real values / secrets
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# Plan output
+*.tfplan
