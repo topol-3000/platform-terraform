@@ -16,7 +16,7 @@ variable "vpc_cidr" {
 variable "azs" {
   description = "Availability zones to place one public subnet in each."
   type        = list(string)
-  default     = ["eu-central-1a", "eu-central-1b"]
+  default     = ["us-east-1a", "us-east-1b"]
   validation {
     condition     = length(var.azs) >= 2
     error_message = "At least two AZs are required (future ALB needs >=2 subnets)."

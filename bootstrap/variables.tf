@@ -1,7 +1,7 @@
 variable "region" {
   description = "AWS region for the state bucket. Should match the region used by envs/*."
   type        = string
-  default     = "eu-central-1"
+  default     = "us-east-1"
 }
 
 variable "state_bucket_name" {

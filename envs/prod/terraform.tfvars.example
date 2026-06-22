@@ -1,6 +1,6 @@
 # Copy to terraform.tfvars and edit. terraform.tfvars is gitignored.
 
-region        = "eu-central-1"
+region        = "us-east-1"
 environment   = "prod"
 project       = "odoo-saas"
 

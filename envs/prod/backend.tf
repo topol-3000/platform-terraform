@@ -7,7 +7,7 @@ terraform {
   backend "s3" {
     bucket       = "odoo-saas-tfstate"
     key          = "prod/baseline.tfstate"
-    region       = "eu-central-1"
+    region       = "us-east-1"
     encrypt      = true
     use_lockfile = true
   }

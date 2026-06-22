@@ -1,7 +1,7 @@
 variable "region" {
   description = "AWS region for the prod baseline. Must match the state bucket region."
   type        = string
-  default     = "eu-central-1"
+  default     = "us-east-1"
 }
 
 variable "environment" {
@@ -39,7 +39,7 @@ variable "vpc_cidr" {
 variable "azs" {
   description = "Availability zones to deploy public subnets into."
   type        = list(string)
-  default     = ["eu-central-1a", "eu-central-1b"]
+  default     = ["us-east-1a", "us-east-1b"]
   validation {
     condition     = length(var.azs) >= 2
     error_message = "At least two AZs are required (future ALB needs >=2 subnets)."
