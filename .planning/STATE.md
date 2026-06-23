@@ -24,10 +24,10 @@ See: .planning/PROJECT.md (updated 2026-06-23)
 
 ## Current Position
 
-Phase: Phase 2 (not started)
+Phase: Phase 2 (context gathered)
 Plan: —
-Status: Roadmap defined; ready to plan Phase 2
-Last activity: 2026-06-23 — Roadmap created for milestone v1.1 (Phases 2-5)
+Status: Context captured; ready to plan Phase 2
+Last activity: 2026-06-23 — Phase 2 context gathered (ECR-01 changed to managed ECR repository)
 
 Progress: [░░░░░░░░░░] 0% (0/4 phases complete)
 
@@ -104,5 +104,5 @@ Items acknowledged and carried forward from previous milestone close:
 ## Session Continuity
 
 Last session: 2026-06-23
-Stopped at: Roadmap created for v1.1 (Phases 2-5 defined)
-Resume file: .planning/ROADMAP.md
+Stopped at: Phase 2 context gathered (managed ECR repo decision; ECR-01 amended)
+Resume file: .planning/phases/02-container-platform/02-CONTEXT.md
