@@ -1,2 +1,4 @@
-# Outputs for the ecr module. Uncomment / add as resources are implemented;
-# envs/prod/outputs.tf re-exports the ones the provisioner adapter consumes.
+output "image_uri" {
+  description = "ECR repository URL for the odoo-core image; the adapter appends the deployed tag."
+  value       = aws_ecr_repository.odoo_core.repository_url
+}
