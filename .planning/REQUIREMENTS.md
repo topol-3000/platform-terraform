@@ -71,12 +71,28 @@ Each module follows the networking pattern: implement resources → uncomment it
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| _v1.1 requirements mapped by the roadmapper_ | — | Pending |
+| ECR-01 | Phase 2 | Pending |
+| ECR-02 | Phase 2 | Pending |
+| ECS-01 | Phase 2 | Pending |
+| ECS-02 | Phase 2 | Pending |
+| VER-01 | Phase 2 (cross-cutting: all phases) | Pending |
+| RDS-01 | Phase 3 | Pending |
+| RDS-02 | Phase 3 | Pending |
+| RDS-03 | Phase 3 | Pending |
+| RDS-04 | Phase 3 | Pending |
+| SSM-01 | Phase 3 | Pending |
+| SSM-02 | Phase 3 | Pending |
+| EFS-01 | Phase 4 | Pending |
+| EFS-02 | Phase 4 | Pending |
+| ACM-01 | Phase 5 | Pending |
+| ALB-01 | Phase 5 | Pending |
+| DNS-01 | Phase 5 | Pending |
+| TLS-02 | Phase 5 | Pending |
 
 **Coverage:**
-- v1.1 requirements: 17 total (ECR ×2, ECS ×2, RDS ×4, EFS ×2, TLS/routing ×4, SSM ×2, VER ×1)
-- Mapped to phases: _pending roadmapper_
+- v1.1 requirements: 17 total (ECR x2, ECS x2, RDS x4, EFS x2, TLS/routing x4, SSM x2, VER x1)
+- Mapped to phases: 17/17 (100%) — Phase 2: 5, Phase 3: 6, Phase 4: 2, Phase 5: 4
 
 ---
 *Requirements defined: 2026-06-19 (v1.0)*
-*Last updated: 2026-06-23 — v1.1 scope (complete the shared baseline)*
+*Last updated: 2026-06-23 — v1.1 traceability filled by roadmapper*
