@@ -51,12 +51,21 @@ Plans:
 **Requirements**: ECR-01, ECR-02, ECS-01, ECS-02, VER-01
 **Success Criteria** (what must be TRUE):
 
-  1. `modules/ecr/main.tf` declares an ECR pull-through cache rule with `ghcr.io` as the upstream source, and the module exports `image_uri` as the pull-through cache repository URI for the `odoo-core` image.
+  1. `modules/ecr/main.tf` declares a managed `aws_ecr_repository` for the `odoo-core` image (`name_prefix`-named, scan-on-push, immutable tags, AES256 encryption, untagged-image lifecycle policy) — NOT a pull-through cache (per Phase 2 CONTEXT D-01) — and the module exports `image_uri` as the repository's `repository_url` attribute (no account-id string, no STS data source).
   2. `modules/ecs/main.tf` declares a shared ECS/Fargate cluster named with `var.name_prefix`, and the module exports `cluster_arn`.
   3. The `module "ecr"` and `module "ecs"` calls in `envs/prod/main.tf` are uncommented, and the `ecr_image_uri` and `ecs_cluster_arn` outputs in `envs/prod/outputs.tf` are uncommented and resolve to the correct module attributes.
   4. `make plan-check` passes: `terraform fmt -check`, `terraform validate`, and `terraform plan` all succeed, with the ECR and ECS resources appearing in the plan output (plan is non-empty and includes more resources than Phase 1 alone).
 
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+**Wave 1** *(parallel — no file overlap)*
+
+- [ ] 02-01-PLAN.md — Implement modules/ecr (managed aws_ecr_repository for odoo-core, scan-on-push, immutable tags, AES256, untagged-image lifecycle policy, image_uri output from repository_url)
+- [ ] 02-02-PLAN.md — Implement modules/ecs (ECS/Fargate cluster, Container Insights, FARGATE + FARGATE_SPOT capacity providers, cluster_arn output)
+
+**Wave 2** *(blocked on Wave 1)*
+
+- [ ] 02-03-PLAN.md — Wire ecr/ecs into envs/prod (uncomment module calls + contract outputs, rewrite stale pull-through wording), run offline make plan-check gate
 
 ### Phase 3: Databases and secrets
 
@@ -110,7 +119,7 @@ Phase 1 complete. Execute Phase 2 → Phase 3 → Phase 4 → Phase 5 in depende
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Networking module | 2/2 | Complete | 2026-06-19 |
-| 2. Container platform | 0/TBD | Not started | - |
+| 2. Container platform | 0/3 | Planned | - |
 | 3. Databases and secrets | 0/TBD | Not started | - |
 | 4. Shared filesystem | 0/TBD | Not started | - |
 | 5. TLS and routing | 0/TBD | Not started | - |
