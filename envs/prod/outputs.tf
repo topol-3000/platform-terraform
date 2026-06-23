@@ -3,10 +3,10 @@
 #
 # See provisioner/src/provisioning_worker/settings.py for the matching fields.
 
-# output "ecs_cluster_arn" {
-#   description = "Shared ECS cluster ARN -> provisioner `aws_ecs_cluster`."
-#   value       = module.ecs.cluster_arn
-# }
+output "ecs_cluster_arn" {
+  description = "Shared ECS cluster ARN -> provisioner `aws_ecs_cluster`."
+  value       = module.ecs.cluster_arn
+}
 
 output "private_subnet_ids" {
   description = "Subnets for tenant tasks -> provisioner `aws_subnets`."
@@ -58,7 +58,7 @@ output "alb_security_group_id" {
 #   value       = module.acm.cert_arn
 # }
 
-# output "ecr_image_uri" {
-#   description = "ECR pull-through image URI -> provisioner `aws_ecr_image`."
-#   value       = module.ecr.image_uri
-# }
+output "ecr_image_uri" {
+  description = "ECR repository URL for odoo-core -> provisioner `aws_ecr_image`."
+  value       = module.ecr.image_uri
+}

@@ -19,17 +19,17 @@ module "networking" {
   azs         = var.azs
 }
 
-# --- 3. ECR pull-through cache (odoo-core image from GHCR) ---------------------
-# module "ecr" {
-#   source      = "../../modules/ecr"
-#   name_prefix = local.name_prefix
-# }
+# --- 3. Managed ECR repository (odoo-core image) --------------------------------
+module "ecr" {
+  source      = "../../modules/ecr"
+  name_prefix = local.name_prefix
+}
 
 # --- 4. Shared ECS cluster (Fargate fleet) ------------------------------------
-# module "ecs" {
-#   source      = "../../modules/ecs"
-#   name_prefix = local.name_prefix
-# }
+module "ecs" {
+  source      = "../../modules/ecs"
+  name_prefix = local.name_prefix
+}
 
 # --- 5. Databases -------------------------------------------------------------
 # module "rds_tenant" {
