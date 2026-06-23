@@ -1,2 +1,4 @@
-# Outputs for the ecs module. Uncomment / add as resources are implemented;
-# envs/prod/outputs.tf re-exports the ones the provisioner adapter consumes.
+output "cluster_arn" {
+  description = "Shared ECS cluster ARN for the tenant Fargate fleet."
+  value       = aws_ecs_cluster.main.arn
+}
