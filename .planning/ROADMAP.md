@@ -81,7 +81,24 @@ Plans:
   5. The `rds_tenant`, `rds_proxy`, and `rds_control_plane` calls in `envs/prod/main.tf` are uncommented using underscore labels (not hyphens), and the `tenant_rds_endpoint`, `rds_proxy_endpoint`, and control-plane endpoint outputs in `envs/prod/outputs.tf` are uncommented and resolve correctly.
   6. `make plan-check` passes: `terraform fmt -check`, `terraform validate`, and a non-empty `terraform plan` all succeed with the SSM parameters, both RDS instances, and the proxy appearing in the plan.
 
-**Plans**: TBD
+**Plans**: 5 plans
+Plans:
+**Wave 1**
+
+- [ ] 03-01-PLAN.md — Implement modules/ssm (random_password x3, aws_ssm_parameter SecureString x3, sensitive pass-through + name/ARN outputs)
+
+**Wave 2** *(parallel — no file overlap)*
+
+- [ ] 03-02-PLAN.md — Implement modules/rds-tenant (variables pre-declaration, SG 5432-from-task-SG, subnet group, parameter group, Single-AZ db_instance, outputs)
+- [ ] 03-03-PLAN.md — Implement modules/rds-control-plane (variables pre-declaration, isolated SG/subnet-group/param-group, Multi-AZ db_instance, outputs)
+
+**Wave 3** *(blocked on Wave 2)*
+
+- [ ] 03-04-PLAN.md — Implement modules/rds-proxy (variables pre-declaration, 8 count-gated resources behind enable_rds_proxy flag, try() endpoint output)
+
+**Wave 4** *(blocked on Waves 1-3)*
+
+- [ ] 03-05-PLAN.md — Wire ssm/rds_tenant/rds_proxy/rds_control_plane into envs/prod (add random provider, add variables, uncomment module calls with full wiring, add 3 endpoint outputs), run make plan-check gate
 
 ### Phase 4: Shared filesystem
 
@@ -119,7 +136,7 @@ Phase 1 complete. Execute Phase 2 → Phase 3 → Phase 4 → Phase 5 in depende
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Networking module | 2/2 | Complete | 2026-06-19 |
-| 2. Container platform | 3/3 | Complete    | 2026-06-23 |
-| 3. Databases and secrets | 0/TBD | Not started | - |
+| 2. Container platform | 3/3 | Complete | 2026-06-23 |
+| 3. Databases and secrets | 0/5 | Not started | - |
 | 4. Shared filesystem | 0/TBD | Not started | - |
 | 5. TLS and routing | 0/TBD | Not started | - |
