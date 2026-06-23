@@ -8,6 +8,23 @@ Terraform for the **shared AWS baseline** of the Odoo Entitlements SaaS platform
 
 `terraform` in `envs/prod` produces a correct, well-formed plan for the shared AWS baseline — every module the provisioner depends on is implemented, wired, and exports the identifiers the `AwsDeploymentAdapter` needs.
 
+## Current Milestone: v1.1 Complete the shared AWS baseline
+
+**Goal:** Implement, wire, and contract-export the 10 remaining `modules/*` so `terraform plan` in `envs/prod` produces a correct, well-formed plan for the *entire* baseline the provisioner's `AwsDeploymentAdapter` depends on.
+
+**Target modules (locked SEED-001 build order):**
+- `ecr` — pull-through cache from GHCR for the `odoo-core` image
+- `ecs` — shared Fargate cluster
+- `rds-tenant` (Single-AZ) + `rds-proxy` — shared tenant DB + proxy (activated ~30 tenants)
+- `rds-control-plane` (Multi-AZ) — separate provisioner control-plane DB (blast-radius isolation; 99.9% SLA)
+- `efs` — shared filesystem, per-tenant access points created by the adapter (durable across Fargate cross-AZ reschedule — not EBS)
+- `acm` — wildcard cert for `*.{tenant_domain}`
+- `alb` — host-based routing, idle timeout >60s (Odoo longpoll)
+- `route53` — hosted zone for `tenant_domain`
+- `ssm` — Parameter Store SecureStrings (HMAC salt, RDS master creds)
+
+**Per-module done = same as networking:** implement → uncomment its call in `envs/prod/main.tf` → wire its `envs/prod/outputs.tf` contract outputs → pass the offline `make plan-check` gate. Verification stays **code-complete only** (no `terraform apply`).
+
 ## Requirements
 
 ### Validated
@@ -30,16 +47,19 @@ Terraform for the **shared AWS baseline** of the Odoo Entitlements SaaS platform
 
 ### Active
 
-<!-- No active milestone — Phase 1 (networking) complete. Next: start a new milestone for the next module (ecr/ecs/rds/etc.) per SEED-001 build order. -->
+<!-- Milestone v1.1: complete the shared baseline — the 10 remaining modules. Full REQ-IDs in REQUIREMENTS.md; phases in ROADMAP.md. -->
 
-*None — see Out of Scope for deferred modules.*
+- `ecr`, `ecs` — container platform (pull-through cache + shared Fargate cluster)
+- `rds-tenant` + `rds-proxy`, `rds-control-plane` — tenant DB + proxy, separate Multi-AZ control-plane DB
+- `efs` — shared filesystem with per-tenant access points
+- `acm`, `alb`, `route53` — wildcard TLS, host-based routing, hosted zone
+- `ssm` — Parameter Store SecureStrings for secrets
 
 ### Out of Scope
 
 <!-- Explicit boundaries. -->
 
-- All other modules (ecr, ecs, rds-*, efs, alb, acm, route53, ssm) — deferred to future milestones; one milestone at a time per the user's cadence
-- `terraform apply` to real AWS — verification for this milestone is code-complete only (fmt/validate + clean plan); no live apply, no cloud cost
+- `terraform apply` to real AWS — verification for this milestone remains code-complete only (fmt/validate + clean plan); no live apply, no cloud cost
 - `envs/staging` and multi-region/DR — not needed until the baseline exists
 - CI/CD pipeline, tfsec/checkov, Terratest — valuable (see CONCERNS.md) but not part of the networking milestone
 - NAT gateway — deliberately excluded for cost; revisit at ~20+ tenants
@@ -87,4 +107,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-19 after Phase 1 (networking module) completion*
+*Last updated: 2026-06-23 — started milestone v1.1 (complete the shared AWS baseline)*
