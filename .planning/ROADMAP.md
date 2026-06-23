@@ -60,8 +60,8 @@ Plans:
 Plans:
 **Wave 1** *(parallel — no file overlap)*
 
-- [ ] 02-01-PLAN.md — Implement modules/ecr (managed aws_ecr_repository for odoo-core, scan-on-push, immutable tags, AES256, untagged-image lifecycle policy, image_uri output from repository_url)
-- [ ] 02-02-PLAN.md — Implement modules/ecs (ECS/Fargate cluster, Container Insights, FARGATE + FARGATE_SPOT capacity providers, cluster_arn output)
+- [x] 02-01-PLAN.md — Implement modules/ecr (managed aws_ecr_repository for odoo-core, scan-on-push, immutable tags, AES256, untagged-image lifecycle policy, image_uri output from repository_url)
+- [x] 02-02-PLAN.md — Implement modules/ecs (ECS/Fargate cluster, Container Insights, FARGATE + FARGATE_SPOT capacity providers, cluster_arn output)
 
 **Wave 2** *(blocked on Wave 1)*
 
@@ -119,7 +119,7 @@ Phase 1 complete. Execute Phase 2 → Phase 3 → Phase 4 → Phase 5 in depende
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Networking module | 2/2 | Complete | 2026-06-19 |
-| 2. Container platform | 0/3 | Planned | - |
+| 2. Container platform | 2/3 | In Progress|  |
 | 3. Databases and secrets | 0/TBD | Not started | - |
 | 4. Shared filesystem | 0/TBD | Not started | - |
 | 5. TLS and routing | 0/TBD | Not started | - |
