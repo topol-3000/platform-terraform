@@ -14,7 +14,7 @@ This roadmap covers two milestones. **v1.0** delivered the networking foundation
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Networking module** - VPC, public subnets (no NAT), ALB + task security groups, wired into envs/prod with a clean non-empty plan (completed 2026-06-19)
-- [ ] **Phase 2: Container platform** - ECR pull-through cache + shared ECS/Fargate cluster, wired into envs/prod with plan-check green
+- [ ] **Phase 2: Container platform** - Managed ECR repository (odoo-core) + shared ECS/Fargate cluster, wired into envs/prod with plan-check green
 - [ ] **Phase 3: Databases and secrets** - Shared tenant RDS (Single-AZ) + RDS Proxy, separate control-plane RDS (Multi-AZ), and SSM SecureString parameters for credentials — all wired and plan-check green
 - [ ] **Phase 4: Shared filesystem** - Encrypted EFS with per-AZ mount targets and task-SG-scoped NFS access, wired into envs/prod with plan-check green
 - [ ] **Phase 5: TLS and routing** - Wildcard ACM cert, shared ALB (HTTPS, idle_timeout >60s), Route53 hosted zone — all wired with contract outputs exported and plan-check green

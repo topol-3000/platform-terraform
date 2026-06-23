@@ -11,8 +11,8 @@ Each module follows the networking pattern: implement resources → uncomment it
 
 ### ECR — container image
 
-- [ ] **ECR-01**: `modules/ecr` declares an ECR **pull-through cache** rule with GHCR (`ghcr.io`) as upstream, so the `odoo-core` image is pulled through ECR (avoids GHCR rate limits and cold-pull risk for the ~1–2 GB image)
-- [ ] **ECR-02**: `ecr` exports `image_uri` (pull-through cache repo URI for `odoo-core`); the `envs/prod` call and the `ecr_image_uri` output are uncommented and wired
+- [ ] **ECR-01**: `modules/ecr` declares a **managed ECR repository** (`aws_ecr_repository`) for the `odoo-core` image (`name_prefix`-named, scan-on-push, lifecycle policy to expire untagged images). CI/CD pushes the image to ECR — no GHCR runtime dependency, no upstream credential. *(Changed 2026-06-23 from a GHCR pull-through cache: team is moving to AWS-native image storage + private repos; a managed repo also exposes `repository_url` as a resource attribute, keeping the offline `make plan-check` free of account-id/STS data sources. See Phase 2 CONTEXT.md D-01.)*
+- [ ] **ECR-02**: `ecr` exports `image_uri` (the `repository_url` of the `odoo-core` ECR repo); the `envs/prod` call and the `ecr_image_uri` output are uncommented and wired
 
 ### ECS — compute
 
