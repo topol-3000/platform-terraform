@@ -11,13 +11,13 @@ Each module follows the networking pattern: implement resources → uncomment it
 
 ### ECR — container image
 
-- [ ] **ECR-01**: `modules/ecr` declares a **managed ECR repository** (`aws_ecr_repository`) for the `odoo-core` image (`name_prefix`-named, scan-on-push, lifecycle policy to expire untagged images). CI/CD pushes the image to ECR — no GHCR runtime dependency, no upstream credential. *(Changed 2026-06-23 from a GHCR pull-through cache: team is moving to AWS-native image storage + private repos; a managed repo also exposes `repository_url` as a resource attribute, keeping the offline `make plan-check` free of account-id/STS data sources. See Phase 2 CONTEXT.md D-01.)*
-- [ ] **ECR-02**: `ecr` exports `image_uri` (the `repository_url` of the `odoo-core` ECR repo); the `envs/prod` call and the `ecr_image_uri` output are uncommented and wired
+- [x] **ECR-01**: `modules/ecr` declares a **managed ECR repository** (`aws_ecr_repository`) for the `odoo-core` image (`name_prefix`-named, scan-on-push, lifecycle policy to expire untagged images). CI/CD pushes the image to ECR — no GHCR runtime dependency, no upstream credential. *(Changed 2026-06-23 from a GHCR pull-through cache: team is moving to AWS-native image storage + private repos; a managed repo also exposes `repository_url` as a resource attribute, keeping the offline `make plan-check` free of account-id/STS data sources. See Phase 2 CONTEXT.md D-01.)*
+- [x] **ECR-02**: `ecr` exports `image_uri` (the `repository_url` of the `odoo-core` ECR repo); the `envs/prod` call and the `ecr_image_uri` output are uncommented and wired
 
 ### ECS — compute
 
-- [ ] **ECS-01**: `modules/ecs` declares a shared **ECS/Fargate cluster** for all tenant tasks (`name_prefix`-named)
-- [ ] **ECS-02**: `ecs` exports `cluster_arn`; the `envs/prod` call and the `ecs_cluster_arn` output are uncommented and wired
+- [x] **ECS-01**: `modules/ecs` declares a shared **ECS/Fargate cluster** for all tenant tasks (`name_prefix`-named)
+- [x] **ECS-02**: `ecs` exports `cluster_arn`; the `envs/prod` call and the `ecs_cluster_arn` output are uncommented and wired
 
 ### RDS — databases
 
@@ -45,7 +45,7 @@ Each module follows the networking pattern: implement resources → uncomment it
 
 ### Verification (milestone-wide)
 
-- [ ] **VER-01**: After each module lands, `terraform fmt -check`, `terraform validate`, and a non-empty `terraform plan` in `envs/prod` all pass via the offline `make plan-check` gate — no `terraform apply`
+- [x] **VER-01**: After each module lands, `terraform fmt -check`, `terraform validate`, and a non-empty `terraform plan` in `envs/prod` all pass via the offline `make plan-check` gate — no `terraform apply`
 
 ## Completed — v1.0 Networking (shipped)
 
@@ -71,11 +71,11 @@ Each module follows the networking pattern: implement resources → uncomment it
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ECR-01 | Phase 2 | Pending |
-| ECR-02 | Phase 2 | Pending |
-| ECS-01 | Phase 2 | Pending |
-| ECS-02 | Phase 2 | Pending |
-| VER-01 | Phase 2 (cross-cutting: all phases) | Pending |
+| ECR-01 | Phase 2 | Complete |
+| ECR-02 | Phase 2 | Complete |
+| ECS-01 | Phase 2 | Complete |
+| ECS-02 | Phase 2 | Complete |
+| VER-01 | Phase 2 (cross-cutting: all phases) | Complete |
 | RDS-01 | Phase 3 | Pending |
 | RDS-02 | Phase 3 | Pending |
 | RDS-03 | Phase 3 | Pending |
