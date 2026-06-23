@@ -642,9 +642,11 @@ Based on the v6 upgrade guide (GitHub issue #41101 and HashiCorp blog):
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **SSM module boundary for random_password**
+> All three questions were reviewed by the planner and resolved in the Phase 3 plans (03-01 generates `random_password` in `modules/ssm`; 03-04/03-05 add `vpc_id` and pass `module.networking.vpc_id`; the tenant SG keeps task-SG-only ingress with proxy-SG ingress deferred to flag activation).
+
+1. **RESOLVED: SSM module boundary for random_password**
    - What we know: `random_password.result` must feed both `aws_ssm_parameter.value` (in ssm module) AND `aws_db_instance.password` (in rds modules).
    - What's unclear: Whether to generate in `modules/ssm` (centralised, exports sensitive outputs) or in each rds module (decentralised, duplicates SSM writes).
    - Recommendation: Generate in `modules/ssm`, export sensitive string outputs (`tenant_rds_password`, `cp_rds_password`, `hmac_salt_value`) from the SSM module to the root, which passes them as `master_password` to the RDS modules. Mark those SSM outputs `sensitive = true`.
