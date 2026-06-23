@@ -45,11 +45,16 @@ Terraform for the **shared AWS baseline** of the Odoo Entitlements SaaS platform
 - ✓ **NET-05**: Module exports the four contract outputs and the `envs/prod` networking call + outputs are uncommented — Phase 1
 - ✓ **NET-06**: `terraform fmt` + `terraform validate` pass and a non-empty `terraform plan` (9 resources) is produced via the offline `make plan-check` gate — Phase 1
 
+<!-- Validated in Phase 2: Container platform -->
+
+- ✓ **ECR-01/ECR-02**: `modules/ecr` implements a **managed** `aws_ecr_repository` for `odoo-core` (immutable tags, scan-on-push, AES256, untagged-image lifecycle) — managed repo, **not** the rejected GHCR pull-through cache (CONTEXT D-01); exports `image_uri` from `repository_url` — Phase 2
+- ✓ **ECS-01/ECS-02**: `modules/ecs` implements a shared ECS/Fargate cluster (Container Insights, FARGATE + FARGATE_SPOT capacity providers); exports `cluster_arn` — Phase 2
+- ✓ **VER-01**: ecr/ecs wired into `envs/prod`; `make plan-check` green with 13 resources in the plan and `ecr_image_uri` + `ecs_cluster_arn` contract outputs active — Phase 2
+
 ### Active
 
 <!-- Milestone v1.1: complete the shared baseline — the 10 remaining modules. Full REQ-IDs in REQUIREMENTS.md; phases in ROADMAP.md. -->
 
-- `ecr`, `ecs` — container platform (pull-through cache + shared Fargate cluster)
 - `rds-tenant` + `rds-proxy`, `rds-control-plane` — tenant DB + proxy, separate Multi-AZ control-plane DB
 - `efs` — shared filesystem with per-tenant access points
 - `acm`, `alb`, `route53` — wildcard TLS, host-based routing, hosted zone
@@ -107,4 +112,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-23 — started milestone v1.1 (complete the shared AWS baseline)*
+*Last updated: 2026-06-23 — Phase 2 (container platform) complete: managed ECR repo + shared ECS/Fargate cluster wired into envs/prod, plan-check green (13 resources)*
