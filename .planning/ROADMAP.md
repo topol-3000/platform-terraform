@@ -94,7 +94,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2)*
 
-- [ ] 03-04-PLAN.md — Implement modules/rds-proxy (variables pre-declaration, 8 count-gated resources behind enable_rds_proxy flag, try() endpoint output)
+- [x] 03-04-PLAN.md — Implement modules/rds-proxy (variables pre-declaration, 8 count-gated resources behind enable_rds_proxy flag, try() endpoint output)
 
 **Wave 4** *(blocked on Waves 1-3)*
 
@@ -137,6 +137,6 @@ Phase 1 complete. Execute Phase 2 → Phase 3 → Phase 4 → Phase 5 in depende
 |-------|----------------|--------|-----------|
 | 1. Networking module | 2/2 | Complete | 2026-06-19 |
 | 2. Container platform | 3/3 | Complete | 2026-06-23 |
-| 3. Databases and secrets | 3/5 | In Progress|  |
+| 3. Databases and secrets | 4/5 | In Progress|  |
 | 4. Shared filesystem | 0/TBD | Not started | - |
 | 5. TLS and routing | 0/TBD | Not started | - |
