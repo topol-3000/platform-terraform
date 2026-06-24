@@ -12,14 +12,6 @@ resource "random_password" "tenant_rds" {
   override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
-# Separate password for the control-plane RDS instance — tenant and control-plane credentials
-# must never be shared (SEED-001 isolation: never mix tenant + platform data).
-resource "random_password" "cp_rds" {
-  length           = 32
-  special          = true
-  override_special = "!#$%&*()-_=+[]{}<>:?"
-}
-
 # HMAC salt used by the provisioner to derive per-tenant token secrets.
 # Reproducible: stored in SSM so it can be retrieved after rotation without data loss.
 resource "random_password" "hmac_salt" {
@@ -42,21 +34,6 @@ resource "aws_ssm_parameter" "tenant_rds_password" {
   }
 
   tags = { Name = "${var.name_prefix}-rds-tenant-password" }
-}
-
-# Separate SecureString for the control-plane RDS master password — isolated from the tenant
-# credential to limit blast radius if either secret is rotated or compromised.
-resource "aws_ssm_parameter" "cp_rds_password" {
-  name  = "/${var.name_prefix}/rds/control-plane/master-password"
-  type  = "SecureString"
-  value = random_password.cp_rds.result
-  # key_id omitted — uses default alias/aws/ssm (AWS-managed key, D-09)
-
-  lifecycle {
-    ignore_changes = [value] # Allow out-of-band rotation without Terraform drift (D-02)
-  }
-
-  tags = { Name = "${var.name_prefix}-rds-cp-password" }
 }
 
 # HMAC salt stored as a SecureString so the provisioner can re-derive per-tenant token
