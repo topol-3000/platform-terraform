@@ -28,8 +28,8 @@ Each module follows the networking pattern: implement resources → uncomment it
 
 ### EFS — shared filestore
 
-- [ ] **EFS-01**: `modules/efs` declares a shared **encrypted EFS filesystem** with a mount target per AZ and an EFS security group accepting NFS (2049) **only** from the task SG; per-tenant **access points are NOT created by Terraform** (the provisioner adapter creates them at provision time)
-- [ ] **EFS-02**: `efs` exports `efs_id`; the `envs/prod` call and the `efs_id` output are uncommented and wired
+- [x] **EFS-01**: `modules/efs` declares a shared **encrypted EFS filesystem** with a mount target per AZ and an EFS security group accepting NFS (2049) **only** from the task SG; per-tenant **access points are NOT created by Terraform** (the provisioner adapter creates them at provision time)
+- [x] **EFS-02**: `efs` exports `efs_id`; the `envs/prod` call and the `efs_id` output are uncommented and wired
 
 ### TLS & routing — ACM, ALB, Route53
 
@@ -82,8 +82,8 @@ Each module follows the networking pattern: implement resources → uncomment it
 | RDS-04 | Phase 3 | Complete |
 | SSM-01 | Phase 3 | Complete |
 | SSM-02 | Phase 3 | Complete |
-| EFS-01 | Phase 4 | Pending |
-| EFS-02 | Phase 4 | Pending |
+| EFS-01 | Phase 4 | Complete |
+| EFS-02 | Phase 4 | Complete |
 | ACM-01 | Phase 5 | Pending |
 | ALB-01 | Phase 5 | Pending |
 | DNS-01 | Phase 5 | Pending |
