@@ -116,7 +116,7 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 04-01-PLAN.md — Implement modules/efs (encrypted filesystem with IA tiering, SG 2049-from-task-SG, for_each mount targets per AZ) + add private_subnets_by_az output to modules/networking
+- [x] 04-01-PLAN.md — Implement modules/efs (encrypted filesystem with IA tiering, SG 2049-from-task-SG, for_each mount targets per AZ) + add private_subnets_by_az output to modules/networking
 
 **Wave 2** *(blocked on Wave 1)*
 
@@ -146,5 +146,5 @@ Phase 1 complete. Execute Phase 2 → Phase 3 → Phase 4 → Phase 5 in depende
 | 1. Networking module | 2/2 | Complete | 2026-06-19 |
 | 2. Container platform | 3/3 | Complete | 2026-06-23 |
 | 3. Databases and secrets | 5/5 | Complete    | 2026-06-24 |
-| 4. Shared filesystem | 0/2 | Not started | - |
+| 4. Shared filesystem | 1/2 | In Progress|  |
 | 5. TLS and routing | 0/TBD | Not started | - |
