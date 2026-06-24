@@ -2,35 +2,32 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Complete the shared AWS baseline
-status: milestone_complete
-last_updated: 2026-06-24T11:41:57.222Z
-last_activity: 2026-06-24 -- Phase 05 execution started
+status: Awaiting next milestone
+last_updated: "2026-06-24T11:46:48.209Z"
+last_activity: 2026-06-24 — Milestone v1.1 completed and archived
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 15
   completed_plans: 15
-  percent: 80
-stopped_at: Milestone complete (Phase 05 was final phase)
+  percent: 100
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-06-23)
+See: .planning/PROJECT.md (updated 2026-06-24)
 
 **Core value:** `terraform` in `envs/prod` produces a correct, well-formed plan for the shared AWS baseline — every module the provisioner depends on is implemented, wired, and exports the identifiers the `AwsDeploymentAdapter` needs.
-**Current focus:** Milestone complete
+**Current focus:** v1.1 shipped — planning next milestone (`/gsd-new-milestone`)
 
 ## Current Position
 
-Phase: 05
-Plan: Not started
-Status: Milestone complete
-Last activity: 2026-06-24
-
-Progress: [░░░░░░░░░░] 0% (0/4 phases complete)
+Phase: Milestone v1.1 complete
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-06-24 — Milestone v1.1 completed and archived
 
 ## Performance Metrics
 
@@ -74,19 +71,11 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-- Pre-declare missing variables before implementing resource bodies (CONCERNS.md): `subnet_ids`/`vpc_id` in `modules/rds-tenant/variables.tf`; `tenant_domain` in `modules/acm/variables.tf` and `modules/route53/variables.tf`; `acm_cert_arn` in `modules/alb/variables.tf`.
-- Add `validation` block for `tenant_domain` in acm and route53 modules (CONCERNS.md security concern — guards against empty-string default silently creating invalid resources).
+- _(none — all v1.1 execution todos resolved; new todos defined at next milestone)_
 
 ### Blockers/Concerns
 
-None currently blocking. Key concerns to watch during execution:
-
-- RDS SG must accept 5432 only from task SG id (not CIDR) — mirrors the networking SG pattern.
-- EFS SG must accept 2049 only from task SG id (not CIDR).
-- `multi_az = false` for tenant RDS, `multi_az = true` for control-plane RDS (separate instances).
-- ALB `idle_timeout > 60` (Odoo longpoll ~50s).
-- SSM params must be `SecureString`; never expose secret values in outputs or state.
-- Per-tenant resources (DBs, ECS services, EFS access points, target groups, DNS records) are NOT created here — provisioner adapter handles those at runtime.
+None. All v1.1 execution-time concerns (SG source-scoping, single-vs-multi-AZ, ALB idle_timeout, SSM SecureString, per-tenant resources out of scope) were satisfied and verified — see PROJECT.md Key Decisions and the archived v1.1 phase summaries.
 
 ### Quick Tasks Completed
 
@@ -96,14 +85,19 @@ None currently blocking. Key concerns to watch during execution:
 
 ## Deferred Items
 
-Items acknowledged and carried forward from previous milestone close:
+Items acknowledged and deferred at milestone close on 2026-06-24:
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
-| *(none)* | | | |
+| uat | 05-HUMAN-UAT.md (Phase 05) | resolved (0 pending scenarios) | v1.1 close |
+| quick_task | 260622-opq-switch-region-us-east-1 | missing (completion manifest absent; committed at 1313d5d) | v1.1 close |
 
 ## Session Continuity
 
 Last session: 2026-06-24T10:15:24.958Z
 Stopped at: Phase 5 context gathered
 Resume file: .planning/phases/05-tls-and-routing/05-CONTEXT.md
+
+## Operator Next Steps
+
+- Start the next milestone with /gsd-new-milestone
