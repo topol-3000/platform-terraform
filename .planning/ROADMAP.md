@@ -136,6 +136,17 @@ Plans:
   5. `make plan-check` passes: `terraform fmt -check`, `terraform validate`, and a non-empty `terraform plan` succeed with all baseline resources (networking + ECR + ECS + RDS + EFS + ACM + ALB + Route53) appearing — the full provisioner output contract is satisfied with all outputs resolvable.
 **UI hint**: no
 
+**Plans**: 3 plans
+Plans:
+**Wave 1** *(parallel — no file overlap)*
+
+- [ ] 05-01-PLAN.md — Implement modules/acm (wildcard cert, DNS validation, tenant_domain regex guard, cert_arn output) + modules/route53 (public hosted zone, same validation guard, hosted_zone_id output)
+- [ ] 05-02-PLAN.md — Implement modules/alb (aws_lb + HTTP:80 redirect + HTTPS:443 fixed-response 503, four variables, listener_arn output) + update Makefile plan-check with -var tenant_domain injection
+
+**Wave 2** *(blocked on Wave 1)*
+
+- [ ] 05-03-PLAN.md — Wire acm/alb/route53 into envs/prod (expand alb stub with subnet/SG inputs, add name_prefix to route53, uncomment three contract outputs), run make plan-check gate
+
 ## Progress
 
 **Execution Order:**
@@ -147,4 +158,4 @@ Phase 1 complete. Execute Phase 2 → Phase 3 → Phase 4 → Phase 5 in depende
 | 2. Container platform | 3/3 | Complete | 2026-06-23 |
 | 3. Databases and secrets | 5/5 | Complete    | 2026-06-24 |
 | 4. Shared filesystem | 2/2 | Complete    | 2026-06-24 |
-| 5. TLS and routing | 0/TBD | Not started | - |
+| 5. TLS and routing | 0/3 | Not started | - |
