@@ -59,6 +59,11 @@ Terraform for the **shared AWS baseline** of the Odoo Entitlements SaaS platform
 - ✓ **RDS-03**: `modules/rds-control-plane` implements a separate Multi-AZ PostgreSQL instance (`db_name = "provisioner"`), fully isolated from tenant RDS — Phase 3
 - ✓ **RDS-04**: all four modules wired into `envs/prod` (underscore labels, `hashicorp/random` provider); `make plan-check` green with 27 resources and the three RDS/SSM contract outputs active — Phase 3
 
+<!-- Validated in Phase 4: Shared filesystem -->
+
+- ✓ **EFS-01**: `modules/efs` implements an encrypted EFS filesystem (`generalPurpose`/`elastic`, at-rest encryption, IA lifecycle tiering) with an EFS SG accepting NFS 2049 **only** from the task SG (SG-reference, not CIDR) and per-AZ mount targets via `for_each`; no per-tenant access points created by Terraform — Phase 4
+- ✓ **EFS-02**: `module "efs"` wired into `envs/prod` (subnets from new `module.networking.private_subnets_by_az` output), `efs_id` contract output active; `make plan-check` green with 31 resources — Phase 4
+
 ### Active
 
 <!-- Milestone v1.1: complete the shared baseline — the remaining modules. Full REQ-IDs in REQUIREMENTS.md; phases in ROADMAP.md. -->
@@ -118,4 +123,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-24 — Phase 3 (databases and secrets) complete: ssm + rds-tenant (Single-AZ) + rds-control-plane (Multi-AZ) + rds-proxy (flag-gated) wired into envs/prod, plan-check green (27 resources)*
+*Last updated: 2026-06-24 — Phase 4 (shared filesystem) complete: modules/efs (encrypted, per-AZ mount targets, task-SG-scoped NFS) wired into envs/prod, plan-check green (31 resources)*
