@@ -112,7 +112,15 @@ Plans:
   3. The `module "efs"` call in `envs/prod/main.tf` is uncommented, and the `efs_id` output in `envs/prod/outputs.tf` is uncommented and resolves to `module.efs.efs_id`.
   4. `make plan-check` passes: `terraform fmt -check`, `terraform validate`, and a non-empty `terraform plan` all succeed with the EFS filesystem, mount targets, and security group appearing in the plan.
 
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+**Wave 1**
+
+- [ ] 04-01-PLAN.md — Implement modules/efs (encrypted filesystem with IA tiering, SG 2049-from-task-SG, for_each mount targets per AZ) + add private_subnets_by_az output to modules/networking
+
+**Wave 2** *(blocked on Wave 1)*
+
+- [ ] 04-02-PLAN.md — Wire efs into envs/prod (uncomment module call with subnet_ids_by_az, uncomment efs_id output), run make plan-check gate
 
 ### Phase 5: TLS and routing
 
@@ -138,5 +146,5 @@ Phase 1 complete. Execute Phase 2 → Phase 3 → Phase 4 → Phase 5 in depende
 | 1. Networking module | 2/2 | Complete | 2026-06-19 |
 | 2. Container platform | 3/3 | Complete | 2026-06-23 |
 | 3. Databases and secrets | 5/5 | Complete    | 2026-06-24 |
-| 4. Shared filesystem | 0/TBD | Not started | - |
+| 4. Shared filesystem | 0/2 | Not started | - |
 | 5. TLS and routing | 0/TBD | Not started | - |
