@@ -89,8 +89,8 @@ Plans:
 
 **Wave 2** *(parallel — no file overlap)*
 
-- [ ] 03-02-PLAN.md — Implement modules/rds-tenant (variables pre-declaration, SG 5432-from-task-SG, subnet group, parameter group, Single-AZ db_instance, outputs)
-- [ ] 03-03-PLAN.md — Implement modules/rds-control-plane (variables pre-declaration, isolated SG/subnet-group/param-group, Multi-AZ db_instance, outputs)
+- [x] 03-02-PLAN.md — Implement modules/rds-tenant (variables pre-declaration, SG 5432-from-task-SG, subnet group, parameter group, Single-AZ db_instance, outputs)
+- [x] 03-03-PLAN.md — Implement modules/rds-control-plane (variables pre-declaration, isolated SG/subnet-group/param-group, Multi-AZ db_instance, outputs)
 
 **Wave 3** *(blocked on Wave 2)*
 
@@ -137,6 +137,6 @@ Phase 1 complete. Execute Phase 2 → Phase 3 → Phase 4 → Phase 5 in depende
 |-------|----------------|--------|-----------|
 | 1. Networking module | 2/2 | Complete | 2026-06-19 |
 | 2. Container platform | 3/3 | Complete | 2026-06-23 |
-| 3. Databases and secrets | 1/5 | In Progress|  |
+| 3. Databases and secrets | 3/5 | In Progress|  |
 | 4. Shared filesystem | 0/TBD | Not started | - |
 | 5. TLS and routing | 0/TBD | Not started | - |
