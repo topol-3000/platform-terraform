@@ -1,14 +1,14 @@
 ---
-status: partial
+status: resolved
 phase: 05-tls-and-routing
 source: [05-VERIFICATION.md, 05-REVIEW.md]
 started: 2026-06-24T11:39:35Z
-updated: 2026-06-24T11:39:35Z
+updated: 2026-06-24T11:40:30Z
 ---
 
 ## Current Test
 
-[awaiting human decision]
+[complete]
 
 ## Tests
 
@@ -19,14 +19,17 @@ without injected vars exits 1 with validation errors from `modules/acm` and `mod
 CLAUDE.md documents `tenant_domain` as a variable that "must be set in terraform.tfvars before
 building route53/acm/alb." Accept (intended guard) or Fix (add `count` gating so empty default
 still plans).
-result: [pending]
+result: passed — developer decision (2026-06-24): Accept as-is. The validation regex is an
+intentional guard against an empty domain; `make plan-check` is the milestone gate and is green;
+CLAUDE.md requires `tenant_domain` to be set in terraform.tfvars before building these modules.
+No code change.
 
 ## Summary
 
 total: 1
-passed: 0
+passed: 1
 issues: 0
-pending: 1
+pending: 0
 skipped: 0
 blocked: 0
 

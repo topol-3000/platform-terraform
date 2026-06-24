@@ -1,9 +1,10 @@
 ---
 phase: 05-tls-and-routing
 verified: 2026-06-24T12:00:00Z
-status: human_needed
+status: passed
 score: 7/7 must-haves verified
 overrides_applied: 0
+human_decision: "CR-01 accepted as-is by developer 2026-06-24 — regex guard is intentional; make plan-check is the milestone gate; tenant_domain required in terraform.tfvars per CLAUDE.md. No code change."
 human_verification:
   - test: "Confirm CR-01 disposition: plain make plan fails with empty tenant_domain"
     expected: >
