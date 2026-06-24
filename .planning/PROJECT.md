@@ -64,12 +64,18 @@ Terraform for the **shared AWS baseline** of the Odoo Entitlements SaaS platform
 - ✓ **EFS-01**: `modules/efs` implements an encrypted EFS filesystem (`generalPurpose`/`elastic`, at-rest encryption, IA lifecycle tiering) with an EFS SG accepting NFS 2049 **only** from the task SG (SG-reference, not CIDR) and per-AZ mount targets via `for_each`; no per-tenant access points created by Terraform — Phase 4
 - ✓ **EFS-02**: `module "efs"` wired into `envs/prod` (subnets from new `module.networking.private_subnets_by_az` output), `efs_id` contract output active; `make plan-check` green with 31 resources — Phase 4
 
+<!-- Validated in Phase 5: TLS and routing -->
+
+- ✓ **ACM-01**: `modules/acm` implements a wildcard `aws_acm_certificate` for `*.{tenant_domain}` (DNS validation, `create_before_destroy`); no `aws_acm_certificate_validation` resource (D-02, plan-only milestone); exports `cert_arn` — Phase 5
+- ✓ **ALB-01**: `modules/alb` implements the shared internet-facing ALB (`idle_timeout = 120` for Odoo longpoll) with an HTTP→HTTPS 301 listener and an HTTPS listener (`ELBSecurityPolicy-TLS13-1-2-2021-06`, fixed-response 503 default); exports `listener_arn` — Phase 5
+- ✓ **DNS-01**: `modules/route53` declares the public `aws_route53_zone` for `tenant_domain` (`force_destroy = false`, no records, no VPC association per D-03); exports `hosted_zone_id` — Phase 5
+- ✓ **TLS-02**: acm/alb/route53 wired into `envs/prod` (acm before alb so `cert_arn` resolves); `acm_cert_arn`, `alb_listener_arn`, `hosted_zone_id` contract outputs active; `make plan-check` green with 36 resources — completes the full provisioner output contract — Phase 5
+
 ### Active
 
-<!-- Milestone v1.1: complete the shared baseline — the remaining modules. Full REQ-IDs in REQUIREMENTS.md; phases in ROADMAP.md. -->
+<!-- Milestone v1.1 complete — all baseline modules implemented and wired. No active requirements. -->
 
-- `efs` — shared filesystem with per-tenant access points
-- `acm`, `alb`, `route53` — wildcard TLS, host-based routing, hosted zone
+_(none — milestone v1.1 complete)_
 
 ### Out of Scope
 
@@ -123,4 +129,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-24 — Phase 4 (shared filesystem) complete: modules/efs (encrypted, per-AZ mount targets, task-SG-scoped NFS) wired into envs/prod, plan-check green (31 resources)*
+*Last updated: 2026-06-24 — Phase 5 (TLS and routing) complete: modules/acm + modules/alb + modules/route53 wired into envs/prod, full provisioner output contract exported, plan-check green (36 resources). **Milestone v1.1 "Complete the shared AWS baseline" achieved** — all baseline modules implemented and wired.*
