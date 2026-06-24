@@ -33,10 +33,10 @@ Each module follows the networking pattern: implement resources → uncomment it
 
 ### TLS & routing — ACM, ALB, Route53
 
-- [ ] **ACM-01**: `modules/acm` declares a **wildcard ACM certificate** for `*.{tenant_domain}` using DNS validation
-- [ ] **ALB-01**: `modules/alb` declares a shared **ALB** with an HTTPS listener using the ACM cert and **idle timeout > 60s** (Odoo longpoll ~50s); per-tenant target groups / host rules are added by the adapter, not Terraform
-- [ ] **DNS-01**: `modules/route53` declares a public **hosted zone** for `tenant_domain`; per-tenant DNS records are added by the adapter
-- [ ] **TLS-02**: the `acm`, `alb`, and `route53` calls and the `acm_cert_arn` / `alb_listener_arn` / `hosted_zone_id` outputs are uncommented and wired
+- [x] **ACM-01**: `modules/acm` declares a **wildcard ACM certificate** for `*.{tenant_domain}` using DNS validation
+- [x] **ALB-01**: `modules/alb` declares a shared **ALB** with an HTTPS listener using the ACM cert and **idle timeout > 60s** (Odoo longpoll ~50s); per-tenant target groups / host rules are added by the adapter, not Terraform
+- [x] **DNS-01**: `modules/route53` declares a public **hosted zone** for `tenant_domain`; per-tenant DNS records are added by the adapter
+- [x] **TLS-02**: the `acm`, `alb`, and `route53` calls and the `acm_cert_arn` / `alb_listener_arn` / `hosted_zone_id` outputs are uncommented and wired
 
 ### SSM — secrets
 
@@ -84,10 +84,10 @@ Each module follows the networking pattern: implement resources → uncomment it
 | SSM-02 | Phase 3 | Complete |
 | EFS-01 | Phase 4 | Complete |
 | EFS-02 | Phase 4 | Complete |
-| ACM-01 | Phase 5 | Pending |
-| ALB-01 | Phase 5 | Pending |
-| DNS-01 | Phase 5 | Pending |
-| TLS-02 | Phase 5 | Pending |
+| ACM-01 | Phase 5 | Complete |
+| ALB-01 | Phase 5 | Complete |
+| DNS-01 | Phase 5 | Complete |
+| TLS-02 | Phase 5 | Complete |
 
 **Coverage:**
 - v1.1 requirements: 17 total (ECR x2, ECS x2, RDS x4, EFS x2, TLS/routing x4, SSM x2, VER x1)

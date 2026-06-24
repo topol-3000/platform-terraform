@@ -2,15 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Complete the shared AWS baseline
-status: executing
-last_updated: "2026-06-24T11:13:52.070Z"
+status: milestone_complete
+last_updated: 2026-06-24T11:41:57.222Z
 last_activity: 2026-06-24 -- Phase 05 execution started
 progress:
   total_phases: 5
   completed_phases: 4
   total_plans: 15
-  completed_plans: 12
+  completed_plans: 15
   percent: 80
+stopped_at: Milestone complete (Phase 05 was final phase)
 ---
 
 # Project State
@@ -20,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-23)
 
 **Core value:** `terraform` in `envs/prod` produces a correct, well-formed plan for the shared AWS baseline — every module the provisioner depends on is implemented, wired, and exports the identifiers the `AwsDeploymentAdapter` needs.
-**Current focus:** Phase 05 — tls-and-routing
+**Current focus:** Milestone complete
 
 ## Current Position
 
-Phase: 05 (tls-and-routing) — EXECUTING
-Plan: 1 of 3
-Status: Executing Phase 05
-Last activity: 2026-06-24 -- Phase 05 execution started
+Phase: 05
+Plan: Not started
+Status: Milestone complete
+Last activity: 2026-06-24
 
 Progress: [░░░░░░░░░░] 0% (0/4 phases complete)
 
@@ -35,7 +36,7 @@ Progress: [░░░░░░░░░░] 0% (0/4 phases complete)
 
 **Velocity:**
 
-- Total plans completed: 12 (Phase 1, previous milestone)
+- Total plans completed: 15 (Phase 1, previous milestone)
 - Average duration: —
 - Total execution time: —
 
@@ -47,7 +48,7 @@ Progress: [░░░░░░░░░░] 0% (0/4 phases complete)
 | 02 | 3 | - | - |
 | 03 | 5 | - | - |
 | 04 | 2 | - | - |
-| 05 | TBD | - | - |
+| 05 | 3 | - | - |
 
 **Recent Trend:**
 
