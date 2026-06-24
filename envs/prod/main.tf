@@ -81,10 +81,14 @@ module "rds_control_plane" {
 }
 
 # --- 6. Filestore, routing/TLS ------------------------------------------------
-# module "efs" {
-#   source      = "../../modules/efs"
-#   name_prefix = local.name_prefix
-# }
+module "efs" {
+  source                 = "../../modules/efs"
+  name_prefix            = local.name_prefix
+  vpc_id                 = module.networking.vpc_id
+  task_security_group_id = module.networking.task_security_group_id
+  subnet_ids_by_az       = module.networking.private_subnets_by_az
+}
+
 #
 # module "acm" {
 #   source        = "../../modules/acm"
