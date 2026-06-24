@@ -149,8 +149,8 @@ and set the values for your deployment:
 
 ## Outputs -> provisioner settings
 
-As modules are built, `envs/prod` exports the identifiers the
-`AwsDeploymentAdapter` needs as `DEPLOYMENT_ADAPTER=aws` settings (see
+`envs/prod` exports the identifiers the `AwsDeploymentAdapter` needs as
+`DEPLOYMENT_ADAPTER=aws` settings (see
 `provisioner/src/provisioning_worker/settings.py`):
 
 | Terraform output             | provisioner setting                    |
