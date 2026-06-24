@@ -45,3 +45,33 @@ variable "azs" {
     error_message = "At least two AZs are required (future ALB needs >=2 subnets)."
   }
 }
+
+variable "enable_rds_proxy" {
+  description = "Enable the RDS Proxy module. Set true at ~30 active tenants."
+  type        = bool
+  default     = false
+}
+
+variable "rds_instance_class" {
+  description = "RDS instance class for both tenant and control-plane instances."
+  type        = string
+  default     = "db.t4g.small"
+}
+
+variable "rds_engine_version" {
+  description = "PostgreSQL engine version for all RDS instances."
+  type        = string
+  default     = "16"
+}
+
+variable "rds_allocated_storage" {
+  description = "Initial allocated storage in GiB for each RDS instance."
+  type        = number
+  default     = 20
+}
+
+variable "rds_max_allocated_storage" {
+  description = "Maximum allocated storage for autoscaling in GiB."
+  type        = number
+  default     = 100
+}

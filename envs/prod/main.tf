@@ -31,24 +31,56 @@ module "ecs" {
   name_prefix = local.name_prefix
 }
 
-# --- 5. Databases -------------------------------------------------------------
-# module "rds_tenant" {
-#   source      = "../../modules/rds-tenant"
-#   name_prefix = local.name_prefix
-#   subnet_ids  = module.networking.private_subnet_ids
-# }
-#
-# module "rds_proxy" {
-#   source      = "../../modules/rds-proxy"
-#   name_prefix = local.name_prefix
-# }
-#
-# module "rds_control_plane" {
-#   source      = "../../modules/rds-control-plane"
-#   name_prefix = local.name_prefix
-# }
+# --- 5. Databases and secrets -------------------------------------------------
 
-# --- 6. Filestore, routing/TLS, secrets ---------------------------------------
+# SSM must come first — rds modules consume its sensitive password outputs.
+module "ssm" {
+  source      = "../../modules/ssm"
+  name_prefix = local.name_prefix
+}
+
+# Shared Single-AZ PostgreSQL for tenant databases (one database per tenant, created by the adapter).
+module "rds_tenant" {
+  source                 = "../../modules/rds-tenant"
+  name_prefix            = local.name_prefix
+  subnet_ids             = module.networking.private_subnet_ids
+  vpc_id                 = module.networking.vpc_id
+  task_security_group_id = module.networking.task_security_group_id
+  master_password        = module.ssm.tenant_rds_password
+  instance_class         = var.rds_instance_class
+  engine_version         = var.rds_engine_version
+  allocated_storage      = var.rds_allocated_storage
+  max_allocated_storage  = var.rds_max_allocated_storage
+}
+
+# RDS Proxy — gated behind var.enable_rds_proxy (default false; activate at ~30 tenants).
+module "rds_proxy" {
+  source                 = "../../modules/rds-proxy"
+  name_prefix            = local.name_prefix
+  enable_rds_proxy       = var.enable_rds_proxy
+  db_instance_identifier = module.rds_tenant.identifier
+  subnet_ids             = module.networking.private_subnet_ids
+  vpc_id                 = module.networking.vpc_id
+  task_security_group_id = module.networking.task_security_group_id
+  master_username        = "odoo_master"
+  master_password        = module.ssm.tenant_rds_password
+}
+
+# Separate Multi-AZ PostgreSQL for the control-plane (provisioner) database — isolated from tenant data.
+module "rds_control_plane" {
+  source                 = "../../modules/rds-control-plane"
+  name_prefix            = local.name_prefix
+  subnet_ids             = module.networking.private_subnet_ids
+  vpc_id                 = module.networking.vpc_id
+  task_security_group_id = module.networking.task_security_group_id
+  master_password        = module.ssm.cp_rds_password
+  instance_class         = var.rds_instance_class
+  engine_version         = var.rds_engine_version
+  allocated_storage      = var.rds_allocated_storage
+  max_allocated_storage  = var.rds_max_allocated_storage
+}
+
+# --- 6. Filestore, routing/TLS ------------------------------------------------
 # module "efs" {
 #   source      = "../../modules/efs"
 #   name_prefix = local.name_prefix
@@ -69,9 +101,4 @@ module "ecs" {
 # module "route53" {
 #   source        = "../../modules/route53"
 #   tenant_domain = var.tenant_domain
-# }
-#
-# module "ssm" {
-#   source      = "../../modules/ssm"
-#   name_prefix = local.name_prefix
 # }

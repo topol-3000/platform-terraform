@@ -33,15 +33,20 @@ output "alb_security_group_id" {
 #   value       = module.alb.listener_arn
 # }
 
-# output "tenant_rds_endpoint" {
-#   description = "Shared tenant RDS endpoint -> provisioner `aws_shared_rds_endpoint`."
-#   value       = module.rds_tenant.endpoint
-# }
+output "tenant_rds_endpoint" {
+  description = "Shared tenant RDS endpoint -> provisioner `aws_shared_rds_endpoint`."
+  value       = module.rds_tenant.endpoint
+}
 
-# output "rds_proxy_endpoint" {
-#   description = "RDS Proxy endpoint -> provisioner `aws_rds_proxy_endpoint`."
-#   value       = module.rds_proxy.endpoint
-# }
+output "rds_proxy_endpoint" {
+  description = "RDS Proxy endpoint -> provisioner `aws_rds_proxy_endpoint`."
+  value       = module.rds_proxy.endpoint
+}
+
+output "control_plane_rds_endpoint" {
+  description = "Control-plane RDS endpoint -> provisioner `aws_control_plane_rds_endpoint`."
+  value       = module.rds_control_plane.endpoint
+}
 
 # output "efs_id" {
 #   description = "Shared EFS id -> provisioner `aws_efs_id`."
