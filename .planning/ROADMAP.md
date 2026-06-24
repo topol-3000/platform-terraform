@@ -140,8 +140,8 @@ Plans:
 Plans:
 **Wave 1** *(parallel — no file overlap)*
 
-- [ ] 05-01-PLAN.md — Implement modules/acm (wildcard cert, DNS validation, tenant_domain regex guard, cert_arn output) + modules/route53 (public hosted zone, same validation guard, hosted_zone_id output)
-- [ ] 05-02-PLAN.md — Implement modules/alb (aws_lb + HTTP:80 redirect + HTTPS:443 fixed-response 503, four variables, listener_arn output) + update Makefile plan-check with -var tenant_domain injection
+- [x] 05-01-PLAN.md — Implement modules/acm (wildcard cert, DNS validation, tenant_domain regex guard, cert_arn output) + modules/route53 (public hosted zone, same validation guard, hosted_zone_id output)
+- [x] 05-02-PLAN.md — Implement modules/alb (aws_lb + HTTP:80 redirect + HTTPS:443 fixed-response 503, four variables, listener_arn output) + update Makefile plan-check with -var tenant_domain injection
 
 **Wave 2** *(blocked on Wave 1)*
 
@@ -158,4 +158,4 @@ Phase 1 complete. Execute Phase 2 → Phase 3 → Phase 4 → Phase 5 in depende
 | 2. Container platform | 3/3 | Complete | 2026-06-23 |
 | 3. Databases and secrets | 5/5 | Complete    | 2026-06-24 |
 | 4. Shared filesystem | 2/2 | Complete    | 2026-06-24 |
-| 5. TLS and routing | 0/3 | Not started | - |
+| 5. TLS and routing | 2/3 | In Progress|  |

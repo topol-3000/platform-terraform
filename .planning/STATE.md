@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Complete the shared AWS baseline
 status: executing
-last_updated: "2026-06-24T11:02:12.061Z"
-last_activity: 2026-06-24 -- Phase 05 planning complete
+last_updated: "2026-06-24T11:13:52.070Z"
+last_activity: 2026-06-24 -- Phase 05 execution started
 progress:
   total_phases: 5
   completed_phases: 4
@@ -20,14 +20,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-23)
 
 **Core value:** `terraform` in `envs/prod` produces a correct, well-formed plan for the shared AWS baseline — every module the provisioner depends on is implemented, wired, and exports the identifiers the `AwsDeploymentAdapter` needs.
-**Current focus:** Phase 5 — tls and routing
+**Current focus:** Phase 05 — tls-and-routing
 
 ## Current Position
 
-Phase: 5
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-06-24 -- Phase 05 planning complete
+Phase: 05 (tls-and-routing) — EXECUTING
+Plan: 1 of 3
+Status: Executing Phase 05
+Last activity: 2026-06-24 -- Phase 05 execution started
 
 Progress: [░░░░░░░░░░] 0% (0/4 phases complete)
 
