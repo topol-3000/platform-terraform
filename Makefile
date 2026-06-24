@@ -45,7 +45,7 @@ plan-check: ## Offline gate for $(ENV): fmt -check, validate, non-empty plan (no
 			'}' > gate_override.tf && \
 		terraform init -reconfigure -input=false >/dev/null && \
 		terraform validate && \
-		terraform plan -input=false
+		terraform plan -input=false -var "tenant_domain=placeholder.example.com"
 
 apply: ## terraform apply for $(ENV)
 	@rm -f $(ENV_DIR)/gate_override.tf
