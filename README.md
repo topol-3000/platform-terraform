@@ -13,7 +13,7 @@ The target architecture is locked in
 **ECS/Fargate + one shared RDS PostgreSQL (database-per-tenant)**, chosen for
 cost-effectiveness and low maintenance.
 
-> **Status:** v1.1 complete. All 11 modules are implemented and wired in `envs/prod/main.tf`.
+> **Status:** v1.1 complete. All 10 modules are implemented and wired in `envs/prod/main.tf`.
 > `terraform plan` produces real resources. No `terraform apply` has been run — this repo
 > is code-complete; apply it to provision the actual AWS baseline.
 
@@ -31,7 +31,6 @@ platform-terraform/
 │   ├── ecr/            # managed ECR repository for odoo-core (CI/CD pushes via GitHub Actions)
 │   ├── ecs/            # shared ECS cluster (Fargate fleet)
 │   ├── rds-tenant/     # shared tenant RDS (Single-AZ, DB-per-tenant)
-│   ├── rds-control-plane/ # separate control-plane RDS (Multi-AZ, 99.9% SLA)
 │   ├── rds-proxy/      # RDS Proxy fronting the tenant RDS
 │   ├── efs/            # shared EFS (per-tenant access points created by adapter)
 │   ├── alb/            # shared ALB, host-based routing, idle timeout > 60s
@@ -140,7 +139,7 @@ and set the values for your deployment:
 | `vpc_cidr` | `10.0.0.0/16` | CIDR block for the VPC |
 | `azs` | `[us-east-1a, us-east-1b]` | Availability zones for public subnets |
 | `enable_rds_proxy` | `false` | Set `true` at ~30 active tenants |
-| `rds_instance_class` | `db.t4g.small` | Applies to both tenant and control-plane RDS |
+| `rds_instance_class` | `db.t4g.small` | Applies to the tenant RDS instance. |
 | `rds_engine_version` | `16` | PostgreSQL major version |
 | `rds_allocated_storage` | `20` | Initial storage in GiB per RDS instance |
 | `rds_max_allocated_storage` | `100` | Storage autoscaling ceiling in GiB |
@@ -163,7 +162,6 @@ and set the values for your deployment:
 | `alb_listener_arn`           | `aws_alb_listener_arn`                 |
 | `tenant_rds_endpoint`        | `aws_shared_rds_endpoint`              |
 | `rds_proxy_endpoint`         | `aws_rds_proxy_endpoint`               |
-| `control_plane_rds_endpoint` | `aws_control_plane_rds_endpoint`       |
 | `efs_id`                     | `aws_efs_id`                           |
 | `hosted_zone_id`             | `aws_hosted_zone_id`                   |
 | `acm_cert_arn`               | `aws_acm_cert_arn`                     |
@@ -183,7 +181,6 @@ All modules are implemented and wired in `envs/prod/main.tf` (v1.1 complete):
 | `ssm` | SSM Parameter Store SecureStrings (HMAC salt, RDS master creds) | complete |
 | `rds-tenant` | Shared Single-AZ PostgreSQL; one database per tenant | complete |
 | `rds-proxy` | RDS Proxy fronting rds-tenant; gated by `enable_rds_proxy` (activate at ~30 tenants) | complete |
-| `rds-control-plane` | Separate Multi-AZ PostgreSQL for control-plane (provisioner) data | complete |
 | `efs` | Shared EFS; per-tenant access points created by the provisioner adapter | complete |
 | `alb` | Shared ALB, host-based routing, idle timeout > 60 s (Odoo longpoll) | complete |
 | `acm` | Wildcard ACM cert for `*.{tenant_domain}` | complete |
