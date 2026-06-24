@@ -89,20 +89,23 @@ module "efs" {
   subnet_ids_by_az       = module.networking.private_subnets_by_az
 }
 
-#
-# module "acm" {
-#   source        = "../../modules/acm"
-#   name_prefix   = local.name_prefix
-#   tenant_domain = var.tenant_domain
-# }
-#
-# module "alb" {
-#   source         = "../../modules/alb"
-#   name_prefix    = local.name_prefix
-#   acm_cert_arn   = module.acm.cert_arn
-# }
-#
-# module "route53" {
-#   source        = "../../modules/route53"
-#   tenant_domain = var.tenant_domain
-# }
+# Build step 6 — Routing/TLS. acm MUST appear before alb (module.acm.cert_arn dependency).
+module "acm" {
+  source        = "../../modules/acm"
+  name_prefix   = local.name_prefix
+  tenant_domain = var.tenant_domain
+}
+
+module "alb" {
+  source            = "../../modules/alb"
+  name_prefix       = local.name_prefix
+  acm_cert_arn      = module.acm.cert_arn
+  subnet_ids        = module.networking.private_subnet_ids
+  security_group_id = module.networking.alb_security_group_id
+}
+
+module "route53" {
+  source        = "../../modules/route53"
+  name_prefix   = local.name_prefix
+  tenant_domain = var.tenant_domain
+}
