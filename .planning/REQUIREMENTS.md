@@ -21,10 +21,10 @@ Each module follows the networking pattern: implement resources → uncomment it
 
 ### RDS — databases
 
-- [ ] **RDS-01**: `modules/rds-tenant` declares a shared **Single-AZ** PostgreSQL instance (master credentials sourced from SSM, never plaintext), a DB subnet group over the baseline subnets, and an RDS security group accepting 5432 **only** from the task SG (and the proxy SG)
-- [ ] **RDS-02**: `modules/rds-proxy` declares an **RDS Proxy** fronting the tenant RDS (auth via the SSM-stored secret); present but designed to activate at ~30 active tenants
-- [ ] **RDS-03**: `modules/rds-control-plane` declares a **separate Multi-AZ** PostgreSQL instance for provisioner control-plane data **only** — isolated from tenant data (blast-radius / 99.9% SLA)
-- [ ] **RDS-04**: the `rds_tenant`, `rds_proxy`, and `rds_control_plane` calls and the `tenant_rds_endpoint` / `rds_proxy_endpoint` (and control-plane endpoint) outputs are uncommented and wired
+- [x] **RDS-01**: `modules/rds-tenant` declares a shared **Single-AZ** PostgreSQL instance (master credentials sourced from SSM, never plaintext), a DB subnet group over the baseline subnets, and an RDS security group accepting 5432 **only** from the task SG (and the proxy SG)
+- [x] **RDS-02**: `modules/rds-proxy` declares an **RDS Proxy** fronting the tenant RDS (auth via the SSM-stored secret); present but designed to activate at ~30 active tenants
+- [x] **RDS-03**: `modules/rds-control-plane` declares a **separate Multi-AZ** PostgreSQL instance for provisioner control-plane data **only** — isolated from tenant data (blast-radius / 99.9% SLA)
+- [x] **RDS-04**: the `rds_tenant`, `rds_proxy`, and `rds_control_plane` calls and the `tenant_rds_endpoint` / `rds_proxy_endpoint` (and control-plane endpoint) outputs are uncommented and wired
 
 ### EFS — shared filestore
 
@@ -40,8 +40,8 @@ Each module follows the networking pattern: implement resources → uncomment it
 
 ### SSM — secrets
 
-- [ ] **SSM-01**: `modules/ssm` declares Parameter Store **SecureString** parameters for the HMAC salt, RDS master credentials, and tokens; secrets are **never** exposed in plaintext outputs or state
-- [ ] **SSM-02**: the `ssm` call is uncommented and wired, exporting only non-secret references (parameter names/ARNs)
+- [x] **SSM-01**: `modules/ssm` declares Parameter Store **SecureString** parameters for the HMAC salt, RDS master credentials, and tokens; secrets are **never** exposed in plaintext outputs or state
+- [x] **SSM-02**: the `ssm` call is uncommented and wired, exporting only non-secret references (parameter names/ARNs)
 
 ### Verification (milestone-wide)
 
@@ -76,12 +76,12 @@ Each module follows the networking pattern: implement resources → uncomment it
 | ECS-01 | Phase 2 | Complete |
 | ECS-02 | Phase 2 | Complete |
 | VER-01 | Phase 2 (cross-cutting: all phases) | Complete |
-| RDS-01 | Phase 3 | Pending |
-| RDS-02 | Phase 3 | Pending |
-| RDS-03 | Phase 3 | Pending |
-| RDS-04 | Phase 3 | Pending |
-| SSM-01 | Phase 3 | Pending |
-| SSM-02 | Phase 3 | Pending |
+| RDS-01 | Phase 3 | Complete |
+| RDS-02 | Phase 3 | Complete |
+| RDS-03 | Phase 3 | Complete |
+| RDS-04 | Phase 3 | Complete |
+| SSM-01 | Phase 3 | Complete |
+| SSM-02 | Phase 3 | Complete |
 | EFS-01 | Phase 4 | Pending |
 | EFS-02 | Phase 4 | Pending |
 | ACM-01 | Phase 5 | Pending |
