@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Complete the shared AWS baseline
 status: Awaiting next milestone
-last_updated: "2026-06-24T12:12:15.303Z"
-last_activity: 2026-06-24 — Completed quick task 260624-gy7: refresh README for v1.1
+last_updated: "2026-06-24T20:09:00.000Z"
+last_activity: 2026-06-24 — Completed quick task 260624-rtu: remove control-plane RDS (tenant-facing resources only)
 progress:
   total_phases: 5
   completed_phases: 5
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-06-24)
 Phase: Milestone v1.1 complete
 Plan: —
 Status: Awaiting next milestone
-Last activity: 2026-06-24 — Completed quick task 260624-gy7: refresh README for v1.1
+Last activity: 2026-06-24 — Completed quick task 260624-rtu: remove control-plane RDS (tenant-facing resources only)
 
 ## Performance Metrics
 
@@ -83,6 +83,7 @@ None. All v1.1 execution-time concerns (SG source-scoping, single-vs-multi-AZ, A
 |---|-------------|------|--------|-----------|
 | 260622-opq | Switch prod baseline default region to us-east-1 | 2026-06-22 | 1313d5d | [260622-opq-switch-region-us-east-1](./quick/260622-opq-switch-region-us-east-1/) |
 | 260624-gy7 | Refresh README for v1.1 (modules implemented, region, outputs, Makefile) | 2026-06-24 | a82f236 | [260624-gy7-update-readme](./quick/260624-gy7-update-readme/) |
+| 260624-rtu | Remove platform-only control-plane RDS — keep only tenant-facing resources | 2026-06-24 | d01b906 | [260624-rtu-remove-control-plane-rds](./quick/260624-rtu-remove-control-plane-rds/) |
 
 ## Deferred Items
 
