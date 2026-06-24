@@ -51,14 +51,20 @@ Terraform for the **shared AWS baseline** of the Odoo Entitlements SaaS platform
 - ✓ **ECS-01/ECS-02**: `modules/ecs` implements a shared ECS/Fargate cluster (Container Insights, FARGATE + FARGATE_SPOT capacity providers); exports `cluster_arn` — Phase 2
 - ✓ **VER-01**: ecr/ecs wired into `envs/prod`; `make plan-check` green with 13 resources in the plan and `ecr_image_uri` + `ecs_cluster_arn` contract outputs active — Phase 2
 
+<!-- Validated in Phase 3: Databases and secrets -->
+
+- ✓ **SSM-01/SSM-02**: `modules/ssm` generates RDS master passwords + HMAC salt via `random_password` and stores them as `aws_ssm_parameter` SecureStrings (`ignore_changes = [value]`); exports only names/ARNs + sensitive pass-throughs — no secret values in plaintext outputs/state — Phase 3
+- ✓ **RDS-01**: `modules/rds-tenant` implements a Single-AZ PostgreSQL instance with the RDS SG accepting 5432 **only** from the task SG (SG-reference, not CIDR), master creds from SSM — Phase 3
+- ✓ **RDS-02**: `modules/rds-proxy` implements the full proxy resource set, all count-gated behind `enable_rds_proxy` (default false) with a `try()`-guarded endpoint — wired for activation at ~30 tenants — Phase 3
+- ✓ **RDS-03**: `modules/rds-control-plane` implements a separate Multi-AZ PostgreSQL instance (`db_name = "provisioner"`), fully isolated from tenant RDS — Phase 3
+- ✓ **RDS-04**: all four modules wired into `envs/prod` (underscore labels, `hashicorp/random` provider); `make plan-check` green with 27 resources and the three RDS/SSM contract outputs active — Phase 3
+
 ### Active
 
-<!-- Milestone v1.1: complete the shared baseline — the 10 remaining modules. Full REQ-IDs in REQUIREMENTS.md; phases in ROADMAP.md. -->
+<!-- Milestone v1.1: complete the shared baseline — the remaining modules. Full REQ-IDs in REQUIREMENTS.md; phases in ROADMAP.md. -->
 
-- `rds-tenant` + `rds-proxy`, `rds-control-plane` — tenant DB + proxy, separate Multi-AZ control-plane DB
 - `efs` — shared filesystem with per-tenant access points
 - `acm`, `alb`, `route53` — wildcard TLS, host-based routing, hosted zone
-- `ssm` — Parameter Store SecureStrings for secrets
 
 ### Out of Scope
 
@@ -112,4 +118,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-23 — Phase 2 (container platform) complete: managed ECR repo + shared ECS/Fargate cluster wired into envs/prod, plan-check green (13 resources)*
+*Last updated: 2026-06-24 — Phase 3 (databases and secrets) complete: ssm + rds-tenant (Single-AZ) + rds-control-plane (Multi-AZ) + rds-proxy (flag-gated) wired into envs/prod, plan-check green (27 resources)*
