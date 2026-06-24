@@ -13,9 +13,9 @@ The target architecture is locked in
 **ECS/Fargate + one shared RDS PostgreSQL (database-per-tenant)**, chosen for
 cost-effectiveness and low maintenance.
 
-> **Status:** scaffold. Backend bootstrap is complete; the resource modules are
-> stubs with TODOs (see [Roadmap](#roadmap)). `terraform plan` in `envs/prod`
-> succeeds and currently produces no resources.
+> **Status:** v1.1 complete. All 11 modules are implemented and wired in `envs/prod/main.tf`.
+> `terraform plan` produces real resources. No `terraform apply` has been run — this repo
+> is code-complete; apply it to provision the actual AWS baseline.
 
 ---
 
@@ -26,19 +26,23 @@ platform-terraform/
 ├── bootstrap/          # creates the S3 state bucket (local state, run ONCE)
 ├── envs/
 │   └── prod/           # the prod root config — S3 backend, wires modules
-└── modules/            # reusable resource modules (stubs for now)
-    ├── networking/     # VPC, public subnets (NO NAT gateway), security groups
-    ├── ecr/            # ECR pull-through cache for odoo-core (from GHCR)
-    ├── ecs/            # shared ECS cluster (Fargate fleet)
-    ├── rds-tenant/     # shared tenant RDS (Single-AZ, DB-per-tenant)
-    ├── rds-control-plane/ # separate control-plane RDS (Multi-AZ, 99.9% SLA)
-    ├── rds-proxy/      # RDS Proxy fronting the tenant RDS
-    ├── efs/            # shared EFS (per-tenant access points created by adapter)
-    ├── alb/            # shared ALB, host-based routing, idle timeout > 60s
-    ├── acm/            # wildcard ACM cert for *.{suffix}
-    ├── route53/        # hosted zone for the tenant domain
-    └── ssm/            # SSM Parameter Store params (HMAC salt, master creds)
+├── modules/            # reusable resource modules
+│   ├── networking/     # VPC, public subnets (NO NAT gateway), security groups
+│   ├── ecr/            # managed ECR repository for odoo-core (CI/CD pushes via GitHub Actions)
+│   ├── ecs/            # shared ECS cluster (Fargate fleet)
+│   ├── rds-tenant/     # shared tenant RDS (Single-AZ, DB-per-tenant)
+│   ├── rds-control-plane/ # separate control-plane RDS (Multi-AZ, 99.9% SLA)
+│   ├── rds-proxy/      # RDS Proxy fronting the tenant RDS
+│   ├── efs/            # shared EFS (per-tenant access points created by adapter)
+│   ├── alb/            # shared ALB, host-based routing, idle timeout > 60s
+│   ├── acm/            # wildcard ACM cert for *.{suffix}
+│   ├── route53/        # hosted zone for the tenant domain
+│   └── ssm/            # SSM Parameter Store params (HMAC salt, master creds)
+└── docs/               # supplementary guides (e.g. github-actions-ecr-push.md)
 ```
+
+See [`docs/github-actions-ecr-push.md`](docs/github-actions-ecr-push.md) for the guide
+on setting up GitHub Actions to push the `odoo-core` image to the ECR repository.
 
 Why directory-per-env (`envs/prod`) instead of workspaces: each environment gets
 its own backend state key and can diverge freely. Add `envs/staging` later by
@@ -63,7 +67,7 @@ blocked). You run it once, by hand, before anything else.
 - **Terraform ≥ 1.11** (native S3 state locking). `terraform version` to check.
 - **AWS credentials** with rights to create the baseline (an admin/bootstrap
   profile). Configure via `AWS_PROFILE` / `AWS_REGION` or `aws configure`.
-- An AWS account and a chosen region (default `eu-central-1` — change in
+- An AWS account and a chosen region (default `us-east-1` — change in
   `*.tfvars` and `bootstrap`).
 
 ---
@@ -101,45 +105,86 @@ terraform plan
 terraform apply
 ```
 
-A `Makefile` wraps the common commands — `make plan`, `make apply`, `make fmt`,
-`make validate` (all operate on `envs/prod`), and `make bootstrap`.
+A `Makefile` wraps the common commands (all operate on `envs/prod` unless noted):
+
+| Target | Description |
+| ------ | ----------- |
+| `make help` | List all targets with descriptions |
+| `make bootstrap` | Create the S3 state bucket (run once, local state) |
+| `make init` | `terraform init` for the prod env |
+| `make plan-check` | **Offline gate:** `fmt -check` + `validate` + non-empty `plan` — no AWS credentials or S3 access required |
+| `make plan` | `terraform plan` (real: requires S3 backend + AWS credentials) |
+| `make apply` | `terraform apply` |
+| `make destroy` | `terraform destroy` |
+| `make fmt` | Format all `.tf` files recursively |
+| `make validate` | `terraform validate` |
+| `make clean` | Remove local `.terraform` dirs |
+
+`make plan-check` is the code-complete verification gate — use it to confirm the config
+is well-formed without needing AWS access. It writes a transient `gate_override.tf`
+(local backend + stubbed AWS provider), runs the checks, then cleans up.
 
 ---
 
-## Outputs → provisioner settings
+## Configuration
+
+Copy `envs/prod/terraform.tfvars.example` to `envs/prod/terraform.tfvars` (gitignored)
+and set the values for your deployment:
+
+| Variable | Default | Notes |
+| -------- | ------- | ----- |
+| `region` | `us-east-1` | Must match the state bucket region |
+| `environment` | `prod` | Used in resource names and tags |
+| `project` | `odoo-saas` | Resource name prefix |
+| `tenant_domain` | *(required)* | Apex domain, e.g. `saas.example.com` — set before applying route53/acm/alb |
+| `vpc_cidr` | `10.0.0.0/16` | CIDR block for the VPC |
+| `azs` | `[us-east-1a, us-east-1b]` | Availability zones for public subnets |
+| `enable_rds_proxy` | `false` | Set `true` at ~30 active tenants |
+| `rds_instance_class` | `db.t4g.small` | Applies to both tenant and control-plane RDS |
+| `rds_engine_version` | `16` | PostgreSQL major version |
+| `rds_allocated_storage` | `20` | Initial storage in GiB per RDS instance |
+| `rds_max_allocated_storage` | `100` | Storage autoscaling ceiling in GiB |
+
+---
+
+## Outputs -> provisioner settings
 
 As modules are built, `envs/prod` exports the identifiers the
 `AwsDeploymentAdapter` needs as `DEPLOYMENT_ADAPTER=aws` settings (see
 `provisioner/src/provisioning_worker/settings.py`):
 
-| Terraform output        | provisioner setting          |
-|-------------------------|------------------------------|
-| `ecs_cluster_arn`       | `aws_ecs_cluster`            |
-| `private_subnet_ids`    | `aws_subnets`                |
-| `task_security_group_id`| `aws_security_groups`        |
-| `alb_listener_arn`      | `aws_alb_listener_arn`       |
-| `tenant_rds_endpoint`   | `aws_shared_rds_endpoint`    |
-| `rds_proxy_endpoint`    | `aws_rds_proxy_endpoint`     |
-| `efs_id`                | `aws_efs_id`                 |
-| `hosted_zone_id`        | `aws_hosted_zone_id`         |
-| `acm_cert_arn`          | `aws_acm_cert_arn`           |
-| `ecr_image_uri`         | `aws_ecr_image`              |
-
-These are placeholders until the corresponding modules are implemented.
+| Terraform output             | provisioner setting                    |
+| ---------------------------- | -------------------------------------- |
+| `ecs_cluster_arn`            | `aws_ecs_cluster`                      |
+| `private_subnet_ids`         | `aws_subnets`                          |
+| `task_security_group_id`     | `aws_security_groups`                  |
+| `vpc_id`                     | (consumed by downstream modules)       |
+| `alb_security_group_id`      | (consumed by downstream modules)       |
+| `alb_listener_arn`           | `aws_alb_listener_arn`                 |
+| `tenant_rds_endpoint`        | `aws_shared_rds_endpoint`              |
+| `rds_proxy_endpoint`         | `aws_rds_proxy_endpoint`               |
+| `control_plane_rds_endpoint` | `aws_control_plane_rds_endpoint`       |
+| `efs_id`                     | `aws_efs_id`                           |
+| `hosted_zone_id`             | `aws_hosted_zone_id`                   |
+| `acm_cert_arn`               | `aws_acm_cert_arn`                     |
+| `ecr_image_uri`              | `aws_ecr_image`                        |
 
 ---
 
-## Roadmap
+## Module status
 
-Build order follows SEED-001 §"Next Steps / Prerequisites":
+All modules are implemented and wired in `envs/prod/main.tf` (v1.1 complete):
 
-1. ✅ Repo scaffold + S3 state backend (this commit).
-2. ☐ `networking` — VPC with a **public** subnet and **no NAT gateway** (cost),
-   security groups (task SG accepts 8069 **only** from the ALB SG).
-3. ☐ `ecr` — pull-through cache from GHCR for the `odoo-core` image.
-4. ☐ `ecs` — shared Fargate cluster.
-5. ☐ `rds-tenant` (Single-AZ) + `rds-proxy`; `rds-control-plane` (Multi-AZ).
-6. ☐ `efs`, `alb` + `acm` (wildcard), `route53`, `ssm`.
-
-See SEED-001 for the locked decisions, cost-stripping notes, and gotchas
-(EFS small-file latency, ALB idle timeout vs Odoo longpoll, cold ECR pull).
+| Module | Description | Status |
+| ------ | ----------- | ------ |
+| `networking` | VPC, public subnets (no NAT gateway), security groups | complete |
+| `ecr` | Managed ECR repo for odoo-core (IMMUTABLE tags, scan on push) | complete |
+| `ecs` | Shared Fargate cluster | complete |
+| `ssm` | SSM Parameter Store SecureStrings (HMAC salt, RDS master creds) | complete |
+| `rds-tenant` | Shared Single-AZ PostgreSQL; one database per tenant | complete |
+| `rds-proxy` | RDS Proxy fronting rds-tenant; gated by `enable_rds_proxy` (activate at ~30 tenants) | complete |
+| `rds-control-plane` | Separate Multi-AZ PostgreSQL for control-plane (provisioner) data | complete |
+| `efs` | Shared EFS; per-tenant access points created by the provisioner adapter | complete |
+| `alb` | Shared ALB, host-based routing, idle timeout > 60 s (Odoo longpoll) | complete |
+| `acm` | Wildcard ACM cert for `*.{tenant_domain}` | complete |
+| `route53` | Hosted zone for the tenant domain | complete |
