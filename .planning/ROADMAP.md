@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Networking module** - VPC, public subnets (no NAT), ALB + task security groups, wired into envs/prod with a clean non-empty plan (completed 2026-06-19)
 - [x] **Phase 2: Container platform** - Managed ECR repository (odoo-core) + shared ECS/Fargate cluster, wired into envs/prod with plan-check green (completed 2026-06-23)
 - [x] **Phase 3: Databases and secrets** - Shared tenant RDS (Single-AZ) + RDS Proxy, separate control-plane RDS (Multi-AZ), and SSM SecureString parameters for credentials — all wired and plan-check green (completed 2026-06-24)
-- [ ] **Phase 4: Shared filesystem** - Encrypted EFS with per-AZ mount targets and task-SG-scoped NFS access, wired into envs/prod with plan-check green
+- [x] **Phase 4: Shared filesystem** - Encrypted EFS with per-AZ mount targets and task-SG-scoped NFS access, wired into envs/prod with plan-check green (completed 2026-06-24)
 - [ ] **Phase 5: TLS and routing** - Wildcard ACM cert, shared ALB (HTTPS, idle_timeout >60s), Route53 hosted zone — all wired with contract outputs exported and plan-check green
 
 ## Phase Details
@@ -120,7 +120,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1)*
 
-- [ ] 04-02-PLAN.md — Wire efs into envs/prod (uncomment module call with subnet_ids_by_az, uncomment efs_id output), run make plan-check gate
+- [x] 04-02-PLAN.md — Wire efs into envs/prod (uncomment module call with subnet_ids_by_az, uncomment efs_id output), run make plan-check gate
 
 ### Phase 5: TLS and routing
 
@@ -146,5 +146,5 @@ Phase 1 complete. Execute Phase 2 → Phase 3 → Phase 4 → Phase 5 in depende
 | 1. Networking module | 2/2 | Complete | 2026-06-19 |
 | 2. Container platform | 3/3 | Complete | 2026-06-23 |
 | 3. Databases and secrets | 5/5 | Complete    | 2026-06-24 |
-| 4. Shared filesystem | 1/2 | In Progress|  |
+| 4. Shared filesystem | 2/2 | Complete   | 2026-06-24 |
 | 5. TLS and routing | 0/TBD | Not started | - |
