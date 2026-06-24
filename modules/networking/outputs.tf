@@ -17,3 +17,8 @@ output "alb_security_group_id" {
   description = "Security group id for the shared ALB."
   value       = aws_security_group.alb.id
 }
+
+output "private_subnets_by_az" {
+  description = "Map of AZ to public subnet id for EFS mount target per-AZ placement."
+  value       = { for i, az in var.azs : az => aws_subnet.public[i].id }
+}
